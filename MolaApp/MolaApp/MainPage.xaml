@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:MolaApp"
+             x:Class="MolaApp.MainPage">
+
+    <ContentPage.Padding>
+        <OnPlatform x:TypeArguments="Thickness">
+            <On Platform="iOS" Value="20, 40, 20, 20" />
+            <On Platform="Android, WinPhone, Windows" Value="20" />
+        </OnPlatform>
+    </ContentPage.Padding>
+    
+    <StackLayout>
+        <Label Text="Welcome to Xamarin.Forms!" 
+           VerticalOptions="Center" 
+           HorizontalOptions="Center" />
+        <Label Text="Zuerst musst du einen Code scannen!" />
+        <Entry x:Name="randomText" Text="noch leer" />
+        <Button x:Name="scanButton" Text="Scan Code" Clicked="OnScanAsync" />
+    </StackLayout>
+
+</ContentPage>

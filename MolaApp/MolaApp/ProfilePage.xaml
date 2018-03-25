@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MolaApp.ProfilePage">
+    <ContentPage.Content>
+        <StackLayout>
+            <Label x:name="name" Text="{Binding Path=Name}"
+                VerticalOptions="Start" 
+                HorizontalOptions="CenterAndExpand" />
+            <Label x:name="tribe" Text="{Binding Path=TribeId}"
+                VerticalOptions="Start" 
+                HorizontalOptions="CenterAndExpand" />
+            <Label x:name="woodbadge" Text="{Binding Path=WoodbadgeCount}"
+                VerticalOptions="Start" 
+                HorizontalOptions="CenterAndExpand" />
+            <Label x:name="phone" Text="{Binding Path=Phone}"
+                VerticalOptions="Start" 
+                HorizontalOptions="CenterAndExpand" />
+            <Label x:name="mail" Text="{Binding Path=Mail}"
+                VerticalOptions="Start" 
+                HorizontalOptions="CenterAndExpand" />
+            <Label x:name="residence" Text="{Binding Path=Residence}"
+                VerticalOptions="Start" 
+                HorizontalOptions="CenterAndExpand" />
+            <Label x:name="function" Text="{Binding Path=Function}"
+                VerticalOptions="Start" 
+                HorizontalOptions="CenterAndExpand" />
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
