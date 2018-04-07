@@ -18,6 +18,7 @@
         <Label Text="Zuerst musst du einen Code scannen!" />
         <Entry x:Name="randomText" Text="noch leer" />
         <Button x:Name="scanButton" Text="Scan Code" Clicked="OnScanAsync" />
+        <Button x:Name="registerButton" Text="Account erstellen" Clicked="Register" />
     </StackLayout>
 
 </ContentPage>

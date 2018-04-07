@@ -4,7 +4,7 @@ using System.Text;
 
 namespace MolaApp.Model
 {
-    public class ProfileModel
+    public class ProfileModel : IModel
     {
         public string Id { get; }
 

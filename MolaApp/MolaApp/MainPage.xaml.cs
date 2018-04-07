@@ -21,6 +21,12 @@ namespace MolaApp
 			InitializeComponent();
 		}
 
+        void Register(object sender, EventArgs e)
+        {
+            var registerPage = new RegistrationPage();
+            Navigation.PushAsync(registerPage);
+        }
+
         async void OnScanAsync(object sender, EventArgs e)
         {
             var options = new ZXing.Mobile.MobileBarcodeScanningOptions();
