@@ -1,4 +1,5 @@
 ﻿using MolaApp.Model;
+using MolaApp.Page;
 using MolaApp.Repository;
 using PCLStorage;
 using System;
@@ -10,20 +11,24 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using ZXing.Net.Mobile.Forms;
 
-namespace MolaApp
+namespace MolaApp.Page
 {
-	public partial class MainPage : ContentPage
+	public partial class MainPage : MolaPage
 	{
+        ProfileRepository profileRepo;
+
         string scannedId;
 
-		public MainPage()
+		public MainPage(ServiceContainer container) : base(container)
 		{
 			InitializeComponent();
-		}
+            profileRepo = Container.Get<ProfileRepository>("repository/profile");
+
+        }
 
         void Register(object sender, EventArgs e)
         {
-            var registerPage = new RegistrationPage();
+            var registerPage = new RegistrationPage(Container);
             Navigation.PushAsync(registerPage);
         }
 
@@ -59,19 +64,16 @@ namespace MolaApp
             Console.WriteLine(scannedId);
 
             randomText.Text = scannedId;
-
-            ProfileRepository repo = new ProfileRepository();
-            System.Diagnostics.Debug.WriteLine("Init Repo");
-            await repo.InitAsync();
+            
             System.Diagnostics.Debug.WriteLine("Get Profile from Repo");
-            ProfileModel profile = await repo.GetAsync(scannedId);
+            ProfileModel profile = await profileRepo.GetAsync(scannedId);
 
             if(profile == null)
             {
                 // show error message
             }
 
-            var profilePage = new ProfilePage(profile);
+            var profilePage = new ProfilePage(Container, profile);
 
             await Navigation.PushAsync(profilePage);
         }

@@ -15,7 +15,6 @@ namespace MolaApp.Repository
         {
             IFolder rootFolder = FileSystem.Current.LocalStorage;
             folder = await rootFolder.CreateFolderAsync(GetFolderName(), CreationCollisionOption.OpenIfExists);
-            InitSub();
         }
 
         async public Task<T> GetAsync(string id)
@@ -50,8 +49,6 @@ namespace MolaApp.Repository
 
             return default(T);
         }
-
-        abstract protected void InitSub();
 
         abstract protected string GetFolderName();
 

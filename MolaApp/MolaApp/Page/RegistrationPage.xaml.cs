@@ -1,5 +1,5 @@
 ﻿using MolaApp.Model;
-using MolaApp.Service;
+using MolaApp.Api;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,18 +11,18 @@ using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using ZXing.Net.Mobile.Forms;
 
-namespace MolaApp
+namespace MolaApp.Page
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class RegistrationPage : ContentPage
-	{
+	public partial class RegistrationPage : MolaPage
+    {
         string scannedId;
-        UserService userService;
+        IUserApi userApi;
 
-        public RegistrationPage ()
+        public RegistrationPage (ServiceContainer container) : base(container)
 		{
 			InitializeComponent ();
-            userService = new UserService();
+            userApi = Container.Get<IUserApi>("api/user");
 		}
 
         async void ScanAsync(object sender, EventArgs e)
@@ -67,16 +67,16 @@ namespace MolaApp
 
             try
             {
-                await userService.CreateAsync(model);
+                await userApi.CreateAsync(model);
                 // TODO switch to login page
             }
             catch (ConflictException ex)
             {
-                if(ex.Field == UserService.ConflictFieldId)
+                if(ex.Field == UserApi.ConflictFieldId)
                 {
                     codeErrorLabel.Text = "Der von dir gescannte Code ist bereits für einen anderen Benutzer reserviert!";
                 }
-                else if(ex.Field == UserService.ConflictFieldEmail)
+                else if(ex.Field == UserApi.ConflictFieldEmail)
                 {
                     emailErrorLabel.Text = "Es existiert bereits ein Account mit dieser Email-Adresse";
                 }

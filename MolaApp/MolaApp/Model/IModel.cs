@@ -4,7 +4,7 @@ using System.Text;
 
 namespace MolaApp.Model
 {
-    interface IModel
+    public interface IModel
     {
         string Id
         {

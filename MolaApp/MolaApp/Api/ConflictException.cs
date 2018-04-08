@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace MolaApp.Service
+namespace MolaApp.Api
 {
     class ConflictException : Exception
     {

@@ -9,14 +9,14 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-namespace MolaApp
+namespace MolaApp.Page
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class ProfilePage : ContentPage
-	{
+	public partial class ProfilePage : MolaPage
+    {
         protected ProfileModel Profile { get; set; }
 
-		public ProfilePage (ProfileModel profile)
+		public ProfilePage (ServiceContainer container, ProfileModel profile) : base(container)
 		{
             this.BindingContext = profile;
 

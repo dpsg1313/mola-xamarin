@@ -6,9 +6,9 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MolaApp.Service
+namespace MolaApp.Api
 {
-    class ProfileService : AbstractService<ProfileModel>
+    class ProfileApi : AbstractApi<ProfileModel>, IProfileApi
     {
         string baseUrl = "http://encala.de/";
 

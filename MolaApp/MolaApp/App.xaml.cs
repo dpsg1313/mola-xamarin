@@ -1,4 +1,7 @@
-﻿using System;
+﻿using MolaApp.Api;
+using MolaApp.Page;
+using MolaApp.Repository;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,17 +12,36 @@ namespace MolaApp
 {
 	public partial class App : Application
 	{
+        private ServiceContainer container;
+
 		public App ()
 		{
 			InitializeComponent();
 
-            MainPage = new NavigationPage(new MainPage());
+            MainPage = new LoadingPage();
         }
 
-		protected override void OnStart ()
+		protected override async void OnStart ()
 		{
-			// Handle when your app starts
-		}
+            ProfileApi profileApi = new ProfileApi();
+            UserApi userApi = new UserApi();
+            AdventureApi adventureApi = new AdventureApi();
+
+            AuthController authController = new AuthController(userApi);
+            await authController.InitAsync();
+            
+            ProfileRepository profileRepo = new ProfileRepository(profileApi);
+            await profileRepo.InitAsync();
+            
+            container = new ServiceContainer();
+            container.Add("auth", authController);
+            container.Add("repository/profile", profileRepo);
+            container.Add("api/profile", profileApi);
+            container.Add("api/user", userApi);
+            container.Add("api/adventure", adventureApi);
+
+            MainPage = new NavigationPage(new MainPage(container));
+        }
 
 		protected override void OnSleep ()
 		{

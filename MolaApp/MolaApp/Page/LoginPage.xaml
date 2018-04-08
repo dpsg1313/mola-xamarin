@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<AbstractPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MolaApp.Page.LoginPage" Title="Login">
+    <AbstractPage.Content>
+        <StackLayout>
+            <Label Text="Um dich anzumelden kannst du entweder deinen Code scannen oder deine Email-Adresse eingeben."
+                   VerticalOptions="CenterAndExpand" 
+                   HorizontalOptions="CenterAndExpand" />
+
+            <Button x:Name="scanButton" 
+                    Text="Meinen Aufnäher scannen" 
+                    Clicked="ScanAsync" 
+                    BackgroundColor="AliceBlue" />
+
+            <Entry x:Name="passwordEntry" 
+                   Placeholder="Passwort" 
+                   IsPassword="True"/>
+
+            <Button x:Name="loginButton" 
+                    Text="Anmelden" 
+                    IsEnabled="False" 
+                    Clicked="LoginAsync" 
+                    BackgroundColor="LawnGreen" />
+        </StackLayout>
+    </AbstractPage.Content>
+</AbstractPage>

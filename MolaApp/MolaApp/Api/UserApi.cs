@@ -7,9 +7,9 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MolaApp.Service
+namespace MolaApp.Api
 {
-    class UserService : AbstractService<UserModel>
+    public class UserApi : AbstractApi<UserModel>, IUserApi
     {
         public static string ConflictFieldEmail = "email";
         public static string ConflictFieldId = "id";
@@ -44,6 +44,28 @@ namespace MolaApp.Service
                 }
             }
             throw new Exception("Unexpected failure!");
+        }
+
+        public async Task<AuthToken> GetTokenAsync(UserModel user)
+        {
+            string url = GetBaseUrl() + "/login";
+            Uri uri = new Uri(url);
+
+            HttpContent content = new StringContent(JsonConvert.SerializeObject(user));
+
+            HttpResponseMessage response = await client.PostAsync(uri, content);
+            if (response.IsSuccessStatusCode)
+            {
+                string json = await response.Content.ReadAsStringAsync();
+                JObject o = JObject.Parse(json);
+                if (o.ContainsKey("token") && o.ContainsKey("expires"))
+                {
+                    string token = o.GetValue("token").ToString();
+                    DateTimeOffset expires = DateTimeOffset.Parse(o.GetValue("expires").ToString());
+                    return new AuthToken(token, expires);
+                }
+            }
+            return null;
         }
     }
 }

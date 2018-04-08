@@ -5,13 +5,13 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace MolaApp.Service
+namespace MolaApp.Api
 {
-    abstract class AbstractService<T> where T : IModel
+    abstract public class AbstractApi<T> where T : IModel
     {
         protected HttpClient client;
 
-        public AbstractService()
+        public AbstractApi()
         {
             client = new HttpClient();
             client.MaxResponseContentBufferSize = 256000;

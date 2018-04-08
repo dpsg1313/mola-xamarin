@@ -6,9 +6,9 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MolaApp.Service
+namespace MolaApp.Api
 {
-    class AdventureService : AbstractService<AdventureModel>
+    class AdventureApi : AbstractApi<AdventureModel>, IAdventureApi
     {
         string baseUrl = "http://encala.de/";
 
