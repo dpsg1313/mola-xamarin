@@ -6,9 +6,9 @@ namespace MolaApp.Repository
 {
     class ProfileRepository : AbstractRepository<ProfileModel>
     {
-        ProfileApi api;
+        IProfileApi api;
 
-        public ProfileRepository(ProfileApi profileApi)
+        public ProfileRepository(IProfileApi profileApi)
         {
             api = profileApi;
         }

@@ -23,9 +23,13 @@ namespace MolaApp
 
 		protected override async void OnStart ()
 		{
-            ProfileApi profileApi = new ProfileApi();
-            UserApi userApi = new UserApi();
-            AdventureApi adventureApi = new AdventureApi();
+            //ProfileApi profileApi = new ProfileApi();
+            //UserApi userApi = new UserApi();
+            //AdventureApi adventureApi = new AdventureApi();
+
+            IProfileApi profileApi = new Api.Stub.ProfileApi();
+            IUserApi userApi = new Api.Stub.UserApi();
+            IAdventureApi adventureApi = new Api.Stub.AdventureApi();
 
             AuthController authController = new AuthController(userApi);
             await authController.InitAsync();

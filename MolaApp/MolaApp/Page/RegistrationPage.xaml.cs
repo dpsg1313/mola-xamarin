@@ -68,7 +68,7 @@ namespace MolaApp.Page
             try
             {
                 await userApi.CreateAsync(model);
-                // TODO switch to login page
+                await Navigation.PopAsync();
             }
             catch (ConflictException ex)
             {
