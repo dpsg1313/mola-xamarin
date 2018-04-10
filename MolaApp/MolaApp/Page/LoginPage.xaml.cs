@@ -18,13 +18,28 @@ namespace MolaApp.Page
 	{
         AuthController authController;
 
-        UserModel user;
-        
+        string userId;
 
         public LoginPage (ServiceContainer container) : base(container)
 		{
 			InitializeComponent ();
             authController = Container.Get<AuthController>("auth");
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            if (authController.User != null)
+            {
+                userId = authController.User.Id;
+                passwordEntry.Text = authController.User.Password;
+            }
+        }
+
+        async void RegisterAsync(object sender, EventArgs e)
+        {
+            RegistrationPage registrationPage = new RegistrationPage(Container);
+            await Navigation.PushModalAsync(registrationPage);
         }
 
         async void ScanAsync(object sender, EventArgs e)
@@ -41,7 +56,7 @@ namespace MolaApp.Page
                 // Stop scanning
                 scanPage.IsScanning = false;
 
-                user = new UserModel(result.Text);
+                userId = result.Text;
 
                 waitHandle.Set();
 
@@ -56,13 +71,16 @@ namespace MolaApp.Page
 
             await Task.Run(() => waitHandle.WaitOne());
 
+            scanLabel.Text = userId;
             scanButton.Text = "Anderen Code scannen";
             scanButton.BackgroundColor = Color.Gray;
         }
 
         async void LoginAsync(object sender, EventArgs e)
         {
-            bool success = await authController.LoginAsync(user);
+            UserModel credentials = new UserModel(userId);
+            credentials.Password = passwordEntry.Text;
+            bool success = await authController.LoginAsync(credentials, saveLoginSwitch.IsToggled);
             if (success)
             {
                 await Navigation.PopModalAsync();
@@ -71,6 +89,11 @@ namespace MolaApp.Page
             {
                 await DisplayAlert("Login fehlgeschlagen", "Möglicherweise hast du ein falsches Passwort eingegeben oder du hast gerade keine aureichende Internetverbindung.", "Ok");
             }
+        }
+
+        async void CancelAsync(object sender, EventArgs e)
+        {
+            await Navigation.PopModalAsync();
         }
     }
 }

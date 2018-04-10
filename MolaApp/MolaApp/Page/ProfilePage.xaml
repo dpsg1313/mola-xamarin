@@ -1,30 +1,30 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<MolaPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="MolaApp.Page.ProfilePage">
-    <MolaPage.Content>
-        <StackLayout>
-            <Label x:name="name" Text="{Binding Path=Name}"
+<mp:MolaPage xmlns="http://xamarin.com/schemas/2014/forms"
+          xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+          xmlns:mp="clr-namespace:MolaApp.Page"
+          x:Class="MolaApp.Page.ProfilePage">
+    
+    <StackLayout>
+        <Label x:name="name" Text="{Binding Path=Name}"
                 VerticalOptions="Start" 
                 HorizontalOptions="CenterAndExpand" />
-            <Label x:name="tribe" Text="{Binding Path=TribeId}"
+        <Label x:name="tribe" Text="{Binding Path=TribeId}"
                 VerticalOptions="Start" 
                 HorizontalOptions="CenterAndExpand" />
-            <Label x:name="woodbadge" Text="{Binding Path=WoodbadgeCount}"
+        <Label x:name="woodbadge" Text="{Binding Path=WoodbadgeCount}"
                 VerticalOptions="Start" 
                 HorizontalOptions="CenterAndExpand" />
-            <Label x:name="phone" Text="{Binding Path=Phone}"
+        <Label x:name="phone" Text="{Binding Path=Phone}"
                 VerticalOptions="Start" 
                 HorizontalOptions="CenterAndExpand" />
-            <Label x:name="mail" Text="{Binding Path=Mail}"
+        <Label x:name="mail" Text="{Binding Path=Mail}"
                 VerticalOptions="Start" 
                 HorizontalOptions="CenterAndExpand" />
-            <Label x:name="residence" Text="{Binding Path=Residence}"
+        <Label x:name="residence" Text="{Binding Path=Residence}"
                 VerticalOptions="Start" 
                 HorizontalOptions="CenterAndExpand" />
-            <Label x:name="function" Text="{Binding Path=Function}"
+        <Label x:name="function" Text="{Binding Path=Function}"
                 VerticalOptions="Start" 
                 HorizontalOptions="CenterAndExpand" />
-        </StackLayout>
-    </MolaPage.Content>
-</MolaPage>
+    </StackLayout>
+</mp:MolaPage>

@@ -17,19 +17,31 @@ namespace MolaApp.Page
 	{
         ProfileRepository profileRepo;
 
+        AuthController authController;
+
         string scannedId;
 
 		public MainPage(ServiceContainer container) : base(container)
 		{
 			InitializeComponent();
             profileRepo = Container.Get<ProfileRepository>("repository/profile");
+            authController = Container.Get<AuthController>("auth");
+        }
 
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            if (authController.LoginState == AuthController.State.LoggedOut)
+            {
+                LoginPage loginPage = new LoginPage(Container);
+                Navigation.PushModalAsync(loginPage);
+            }
         }
 
         void Register(object sender, EventArgs e)
         {
             var registerPage = new RegistrationPage(Container);
-            Navigation.PushAsync(registerPage);
+            Navigation.PushModalAsync(registerPage);
         }
 
         async void OnScanAsync(object sender, EventArgs e)

@@ -16,7 +16,7 @@ namespace MolaApp.Page
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class RegistrationPage : MolaPage
     {
-        string scannedId;
+        public string ScannedId;
         IUserApi userApi;
 
         public RegistrationPage (ServiceContainer container) : base(container)
@@ -39,11 +39,11 @@ namespace MolaApp.Page
                 // Stop scanning
                 scanPage.IsScanning = false;
 
-                scannedId = result.Text;
+                ScannedId = result.Text;
 
                 waitHandle.Set();
 
-                // Pop the page and show the result
+                // Pop the scanner page
                 Device.BeginInvokeOnMainThread(() => {
                     Navigation.PopModalAsync();
                 });
@@ -54,14 +54,12 @@ namespace MolaApp.Page
 
             await Task.Run(() => waitHandle.WaitOne());
 
-            scanButton.Text = "Code erneut scannen";
-            scanButton.BackgroundColor = Color.Gray;
-            scanLabel.Text = "Du hast deinen Code erfolgreich gescannt. Deine ID ist: " + scannedId.ToString();
+            
         }
 
         async void CreateAsync(object sender, EventArgs e)
         {
-            UserModel model = new UserModel(scannedId);
+            UserModel model = new UserModel(ScannedId);
             model.Email = emailEntry.Text;
             model.Password = passwordEntry.Text;
 
@@ -81,6 +79,37 @@ namespace MolaApp.Page
                     emailErrorLabel.Text = "Es existiert bereits ein Account mit dieser Email-Adresse";
                 }
             }
+        }
+
+        async void CancelAsync(object sender, EventArgs e)
+        {
+            await Navigation.PopModalAsync();
+        }
+    }
+
+    public class StringEmptyToBooleanConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            bool invert = false;
+            if (parameter is bool)
+            {
+                invert = (bool)parameter;
+            }
+
+            if(string.IsNullOrEmpty(value as string))
+            {
+                return !invert;
+            }
+            else
+            {
+                return invert;
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            throw new NotImplementedException("This conversion is not possible");
         }
     }
 }

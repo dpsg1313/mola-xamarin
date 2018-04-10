@@ -1,27 +1,64 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<MolaPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="MolaApp.Page.RegistrationPage">
-    <MolaPage.Content>
-        <StackLayout>
-            <Label Text="Account erstellen"
+<mp:MolaPage xmlns="http://xamarin.com/schemas/2014/forms"
+          xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+          xmlns:mp="clr-namespace:MolaApp.Page"
+          x:Class="MolaApp.Page.RegistrationPage"
+             Title="Account erstellen">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <mp:StringEmptyToBooleanConverter x:Key="stringEmptyConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <StackLayout>
+
+        <Label x:Name="scanLabel" 
+               Text="Damit wir den Code auf deinem Aufnäher deinem Profil zuordnen können, musst du ihn bitte einmal scannen"
+               VerticalOptions="CenterAndExpand" 
+               HorizontalOptions="CenterAndExpand"
+               IsVisible="{Binding ScannedId, Converter=stringEmptyConverter}"/>
+        <Label x:Name="codeErrorLabel" 
+               Text="" 
+               IsVisible="{Binding ScannedId, Converter=stringEmptyConverter}" />
+        <Button x:Name="scanButton" 
+                Text="Jetzt meinen Aufnäher scannen" 
+                Clicked="ScanAsync" 
+                BackgroundColor="AliceBlue"
+                IsVisible="{Binding ScannedId, Converter=stringEmptyConverter}" />
+
+        <Label x:Name="codeLabel" Text="{Binding ScannedId}"
                 VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
+                HorizontalOptions="CenterAndExpand"
+               IsVisible="{Binding ScannedId, Converter=stringEmptyConverter, ConverterParameter=true}" />
+        
+        <Entry x:Name="emailEntry" 
+               Placeholder="Email-Adresse" 
+               IsVisible="{Binding ScannedId, Converter=stringEmptyConverter, ConverterParameter=true}" />
+        <Label x:Name="emailErrorLabel" 
+               Text="" 
+               IsVisible="{Binding ScannedId, Converter=stringEmptyConverter, ConverterParameter=true}" />
 
-            <Label x:Name="scanLabel" Text="Damit wir den Code auf deinem Aufnäher deinem Profil zuordnen können, musst du ihn bitte einmal scannen"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
-            <Label x:Name="codeErrorLabel" Text="" />
-            <Button x:Name="scanButton" Text="Jetzt meinen Aufnäher scannen" Clicked="ScanAsync" BackgroundColor="AliceBlue" />
+        <Entry x:Name="passwordEntry" 
+               Placeholder="Passwort" 
+               IsPassword="True" 
+               IsVisible="{Binding ScannedId, Converter=stringEmptyConverter, ConverterParameter=true}" />
+        <Entry x:Name="passwordConfirmEntry"
+               Placeholder="Passwort bestätigen"
+               IsPassword="True"
+               IsVisible="{Binding ScannedId, Converter=stringEmptyConverter, ConverterParameter=true}" />
+        <Label x:Name="passwordErrorLabel" 
+               Text=""
+               IsVisible="{Binding ScannedId, Converter=stringEmptyConverter, ConverterParameter=true}" />
 
-            <Entry x:Name="emailEntry" Placeholder="Email-Adresse" />
-            <Label x:Name="emailErrorLabel" Text="" />
+        <Button x:Name="createButton" 
+                Text="Account erstellen" 
+                Clicked="CreateAsync" 
+                BackgroundColor="LawnGreen"
+                IsVisible="{Binding ScannedId, Converter=stringEmptyConverter, ConverterParameter=true}" />
 
-            <Entry x:Name="passwordEntry" Placeholder="Passwort" IsPassword="True"/>
-            <Entry x:Name="passwordConfirmEntry" Placeholder="Passwort bestätigen" IsPassword="True"/>
-            <Label x:Name="passwordErrorLabel" Text="" />
-            
-            <Button x:Name="createButton" Text="Account erstellen" IsEnabled="False" Clicked="CreateAsync" BackgroundColor="LawnGreen" />
-        </StackLayout>
-    </MolaPage.Content>
-</MolaPage>
+        <Button x:Name="cancelButton" 
+                    Text="Abbrechen"  
+                    Clicked="CancelAsync" />
+    </StackLayout>
+</mp:MolaPage>

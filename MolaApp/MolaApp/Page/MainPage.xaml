@@ -1,15 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<MolaPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:MolaApp"
+<mp:MolaPage xmlns="http://xamarin.com/schemas/2014/forms"
+          xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+          xmlns:mp="clr-namespace:MolaApp.Page"
              x:Class="MolaApp.Page.MainPage">
 
-    <MolaPage.Padding>
+    <mp:MolaPage.Padding>
         <OnPlatform x:TypeArguments="Thickness">
             <On Platform="iOS" Value="20, 40, 20, 20" />
             <On Platform="Android, WinPhone, Windows" Value="20" />
         </OnPlatform>
-    </MolaPage.Padding>
+    </mp:MolaPage.Padding>
     
     <StackLayout>
         <Label Text="Welcome to Xamarin.Forms!" 
@@ -21,4 +21,4 @@
         <Button x:Name="registerButton" Text="Account erstellen" Clicked="Register" />
     </StackLayout>
 
-</MolaPage>
+</mp:MolaPage>

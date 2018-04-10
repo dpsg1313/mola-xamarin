@@ -1,27 +1,58 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<AbstractPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="MolaApp.Page.LoginPage" Title="Login">
-    <AbstractPage.Content>
-        <StackLayout>
-            <Label Text="Um dich anzumelden kannst du entweder deinen Code scannen oder deine Email-Adresse eingeben."
-                   VerticalOptions="CenterAndExpand" 
-                   HorizontalOptions="CenterAndExpand" />
+<mp:MolaPage xmlns="http://xamarin.com/schemas/2014/forms"
+                xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                xmlns:mp="clr-namespace:MolaApp.Page"
+                x:Class="MolaApp.Page.LoginPage"
+                Title="Login">
 
-            <Button x:Name="scanButton" 
-                    Text="Meinen Aufnäher scannen" 
-                    Clicked="ScanAsync" 
-                    BackgroundColor="AliceBlue" />
+    <StackLayout>
+        <Label Text="Du hast noch keinen Account?"
+                VerticalOptions="Start" 
+                HorizontalOptions="CenterAndExpand" />
 
-            <Entry x:Name="passwordEntry" 
-                   Placeholder="Passwort" 
-                   IsPassword="True"/>
+        <Button x:Name="registerButton" 
+                Text="Registrieren" 
+                Clicked="RegisterAsync" 
+                VerticalOptions="Start" 
+                HorizontalOptions="CenterAndExpand" />
 
-            <Button x:Name="loginButton" 
-                    Text="Anmelden" 
-                    IsEnabled="False" 
-                    Clicked="LoginAsync" 
-                    BackgroundColor="LawnGreen" />
-        </StackLayout>
-    </AbstractPage.Content>
-</AbstractPage>
+        <Label x:Name="scanLabel"
+               Text="Scanne deinen Code um dich anzumelden!"
+               VerticalOptions="Start" 
+               HorizontalOptions="CenterAndExpand" />
+
+        <Button x:Name="scanButton" 
+                Text="Meinen Aufnäher scannen" 
+                Clicked="ScanAsync" 
+                BackgroundColor="AliceBlue"
+                VerticalOptions="Start" 
+                HorizontalOptions="CenterAndExpand" />
+
+        <Entry x:Name="passwordEntry" 
+                Placeholder="Passwort" 
+                IsPassword="True"
+                VerticalOptions="Start" 
+                HorizontalOptions="CenterAndExpand"/>
+
+        <Label Text="Login speichern"
+                VerticalOptions="Start" 
+                HorizontalOptions="CenterAndExpand" />
+
+        <Switch x:Name="saveLoginSwitch"
+                HorizontalOptions="Start"
+                VerticalOptions="CenterAndExpand" />
+
+        <Button x:Name="loginButton" 
+                Text="Anmelden" 
+                Clicked="LoginAsync" 
+                BackgroundColor="LawnGreen"
+                VerticalOptions="Start" 
+                HorizontalOptions="CenterAndExpand" />
+
+        <Button x:Name="cancelButton" 
+                Text="Abbrechen"  
+                Clicked="CancelAsync"
+                VerticalOptions="Start" 
+                HorizontalOptions="CenterAndExpand" />
+    </StackLayout>
+</mp:MolaPage>
