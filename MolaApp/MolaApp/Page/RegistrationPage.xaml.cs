@@ -57,7 +57,7 @@ namespace MolaApp.Page
             
         }
 
-        async void CreateAsync(object sender, EventArgs e)
+        async void RegisterAsync(object sender, EventArgs e)
         {
             UserModel model = new UserModel(ScannedId);
             model.Email = emailEntry.Text;
@@ -66,7 +66,7 @@ namespace MolaApp.Page
             try
             {
                 await userApi.CreateAsync(model);
-                await Navigation.PopAsync();
+                await Navigation.PopModalAsync();
             }
             catch (ConflictException ex)
             {

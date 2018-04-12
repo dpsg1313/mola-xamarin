@@ -34,24 +34,10 @@
                 VerticalOptions="Start" 
                 HorizontalOptions="CenterAndExpand"/>
 
-        <Label Text="Login speichern"
-                VerticalOptions="Start" 
-                HorizontalOptions="CenterAndExpand" />
-
-        <Switch x:Name="saveLoginSwitch"
-                HorizontalOptions="Start"
-                VerticalOptions="CenterAndExpand" />
-
         <Button x:Name="loginButton" 
                 Text="Anmelden" 
                 Clicked="LoginAsync" 
                 BackgroundColor="LawnGreen"
-                VerticalOptions="Start" 
-                HorizontalOptions="CenterAndExpand" />
-
-        <Button x:Name="cancelButton" 
-                Text="Abbrechen"  
-                Clicked="CancelAsync"
                 VerticalOptions="Start" 
                 HorizontalOptions="CenterAndExpand" />
     </StackLayout>

@@ -31,20 +31,25 @@ namespace MolaApp.Page
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            if (authController.LoginState == AuthController.State.LoggedOut)
+
+        }
+
+        protected override bool OnBackButtonPressed()
+        {
+            return true;
+        }
+
+        async void LogoutAsync(object sender, EventArgs e)
+        {
+            bool result = await DisplayAlert("Logout", "Willst du dich wirklich ausloggen?", "Ja", "Nein");
+            if (result)
             {
-                LoginPage loginPage = new LoginPage(Container);
-                Navigation.PushModalAsync(loginPage);
+                Navigation.InsertPageBefore(new LoginPage(Container), this);
+                await Navigation.PopAsync();
             }
         }
 
-        void Register(object sender, EventArgs e)
-        {
-            var registerPage = new RegistrationPage(Container);
-            Navigation.PushModalAsync(registerPage);
-        }
-
-        async void OnScanAsync(object sender, EventArgs e)
+        async void ScanAsync(object sender, EventArgs e)
         {
             var options = new ZXing.Mobile.MobileBarcodeScanningOptions();
             options.PossibleFormats = new List<ZXing.BarcodeFormat>() {
@@ -74,8 +79,6 @@ namespace MolaApp.Page
             System.Diagnostics.Debug.WriteLine("The modal page is dismissed, do something now");
 
             Console.WriteLine(scannedId);
-
-            randomText.Text = scannedId;
             
             System.Diagnostics.Debug.WriteLine("Get Profile from Repo");
             ProfileModel profile = await profileRepo.GetAsync(scannedId);

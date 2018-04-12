@@ -51,9 +51,9 @@
                Text=""
                IsVisible="{Binding ScannedId, Converter=stringEmptyConverter, ConverterParameter=true}" />
 
-        <Button x:Name="createButton" 
+        <Button x:Name="registerButton" 
                 Text="Account erstellen" 
-                Clicked="CreateAsync" 
+                Clicked="RegisterAsync" 
                 BackgroundColor="LawnGreen"
                 IsVisible="{Binding ScannedId, Converter=stringEmptyConverter, ConverterParameter=true}" />
 

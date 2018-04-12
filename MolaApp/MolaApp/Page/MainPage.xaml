@@ -2,7 +2,8 @@
 <mp:MolaPage xmlns="http://xamarin.com/schemas/2014/forms"
           xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
           xmlns:mp="clr-namespace:MolaApp.Page"
-             x:Class="MolaApp.Page.MainPage">
+             x:Class="MolaApp.Page.MainPage"
+             Title="MOLA">
 
     <mp:MolaPage.Padding>
         <OnPlatform x:TypeArguments="Thickness">
@@ -10,15 +11,12 @@
             <On Platform="Android, WinPhone, Windows" Value="20" />
         </OnPlatform>
     </mp:MolaPage.Padding>
-    
+
     <StackLayout>
-        <Label Text="Welcome to Xamarin.Forms!" 
-           VerticalOptions="Center" 
-           HorizontalOptions="Center" />
-        <Label Text="Zuerst musst du einen Code scannen!" />
-        <Entry x:Name="randomText" Text="noch leer" />
-        <Button x:Name="scanButton" Text="Scan Code" Clicked="OnScanAsync" />
-        <Button x:Name="registerButton" Text="Account erstellen" Clicked="Register" />
+        <Button x:Name="loginButton" Text="Logout" Clicked="LogoutAsync" />
+        
+        <Button x:Name="scanButton" Text="Scan Code" Clicked="ScanAsync" />
+
     </StackLayout>
 
 </mp:MolaPage>

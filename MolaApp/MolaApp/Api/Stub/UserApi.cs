@@ -11,22 +11,32 @@ namespace MolaApp.Api.Stub
 {
     public class UserApi : IUserApi
     {
+        UserModel model;
+
         public async Task<UserModel> GetAsync(string id)
         {
-            UserModel model = new UserModel(id);
             return model;
         }
 
-        public async Task CreateAsync(UserModel model)
+        public async Task CreateAsync(UserModel user)
         {
-            
+            model = user;
         }
 
         public async Task<AuthToken> GetTokenAsync(UserModel user)
         {
-            string token = "testtoken";
-            DateTimeOffset expires = DateTimeOffset.Now.AddDays(5);
-            return new AuthToken(token, expires);
+            if(model == null)
+            {
+                return null;
+            }
+
+            if (user.Id == model.Id && user.Password == model.Password)
+            {
+                string token = "testtoken";
+                DateTimeOffset expires = DateTimeOffset.Now.AddDays(5);
+                return new AuthToken(user.Id, token, expires);
+            }
+            return null;
         }
     }
 }

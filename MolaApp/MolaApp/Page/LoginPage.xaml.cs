@@ -26,16 +26,6 @@ namespace MolaApp.Page
             authController = Container.Get<AuthController>("auth");
         }
 
-        protected override void OnAppearing()
-        {
-            base.OnAppearing();
-            if (authController.User != null)
-            {
-                userId = authController.User.Id;
-                passwordEntry.Text = authController.User.Password;
-            }
-        }
-
         async void RegisterAsync(object sender, EventArgs e)
         {
             RegistrationPage registrationPage = new RegistrationPage(Container);
@@ -80,20 +70,16 @@ namespace MolaApp.Page
         {
             UserModel credentials = new UserModel(userId);
             credentials.Password = passwordEntry.Text;
-            bool success = await authController.LoginAsync(credentials, saveLoginSwitch.IsToggled);
+            bool success = await authController.LoginAsync(credentials);
             if (success)
             {
-                await Navigation.PopModalAsync();
+                Navigation.InsertPageBefore(new MainPage(Container), this);
+                await Navigation.PopAsync();
             }
             else
             {
                 await DisplayAlert("Login fehlgeschlagen", "Möglicherweise hast du ein falsches Passwort eingegeben oder du hast gerade keine aureichende Internetverbindung.", "Ok");
             }
-        }
-
-        async void CancelAsync(object sender, EventArgs e)
-        {
-            await Navigation.PopModalAsync();
         }
     }
 }

@@ -7,6 +7,9 @@
         <Label Text="MOLA"
                 VerticalOptions="CenterAndExpand" 
                 HorizontalOptions="CenterAndExpand" />
-        <ActivityIndicator Color="AliceBlue" IsRunning="true" />
+        <ActivityIndicator Color="AliceBlue" 
+                           IsRunning="true"
+                           VerticalOptions="CenterAndExpand"
+                           HorizontalOptions="CenterAndExpand"/>
     </StackLayout>
 </ContentPage>

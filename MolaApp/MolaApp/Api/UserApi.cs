@@ -46,12 +46,12 @@ namespace MolaApp.Api
             throw new Exception("Unexpected failure!");
         }
 
-        public async Task<AuthToken> GetTokenAsync(UserModel user)
+        public async Task<AuthToken> GetTokenAsync(UserModel credentials)
         {
             string url = GetBaseUrl() + "/login";
             Uri uri = new Uri(url);
 
-            HttpContent content = new StringContent(JsonConvert.SerializeObject(user));
+            HttpContent content = new StringContent(JsonConvert.SerializeObject(credentials));
 
             HttpResponseMessage response = await client.PostAsync(uri, content);
             if (response.IsSuccessStatusCode)
@@ -62,7 +62,7 @@ namespace MolaApp.Api
                 {
                     string token = o.GetValue("token").ToString();
                     DateTimeOffset expires = DateTimeOffset.Parse(o.GetValue("expires").ToString());
-                    return new AuthToken(token, expires);
+                    return new AuthToken(credentials.Id, token, expires);
                 }
             }
             return null;

@@ -44,7 +44,15 @@ namespace MolaApp
             container.Add("api/user", userApi);
             container.Add("api/adventure", adventureApi);
 
-            MainPage = new NavigationPage(new MainPage(container));
+            if (authController.IsLoggedIn)
+            {
+                MainPage = new NavigationPage(new MainPage(container));
+            }
+            else
+            {
+                MainPage = new NavigationPage(new LoginPage(container));
+            }
+            
         }
 
 		protected override void OnSleep ()

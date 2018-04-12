@@ -11,16 +11,12 @@ namespace MolaApp
 {
     public class AuthController
     {
-        private const string LOGIN_FOLDER = "login";
-        private const string CURRENT_LOGIN_FILE = "current.json";
+        private const string TOKEN_FOLDER = "token";
+        private const string CURRENT_TOKEN_FILE = "current.json";
 
-        public enum State { LoggedIn, LoggedOut};
-
-        public State LoginState { get; private set; }
+        public bool IsLoggedIn { get; private set; }
 
         public AuthToken AuthToken { get; private set; }
-
-        public UserModel User { get; private set; }
 
         IUserApi api;
 
@@ -28,62 +24,73 @@ namespace MolaApp
 
         public AuthController(IUserApi userApi)
         {
-            LoginState = State.LoggedOut;
+            IsLoggedIn = false;
             api = userApi;
         }
 
         async public Task InitAsync()
         {
             IFolder rootFolder = FileSystem.Current.LocalStorage;
-            loginFolder = await rootFolder.CreateFolderAsync(LOGIN_FOLDER, CreationCollisionOption.OpenIfExists);
+            loginFolder = await rootFolder.CreateFolderAsync(TOKEN_FOLDER, CreationCollisionOption.OpenIfExists);
 
-            await loadCredentialsAsync();
-            if(User != null && User.Password != null)
-            {
-                await LoginAsync(User, true);
-            }
+            await loadTokenAsync();
         }
 
-        async public Task<bool> LoginAsync(UserModel credentials, bool saveLogin)
+        async public Task<bool> LoginAsync(UserModel credentials)
         {
             AuthToken authToken = await api.GetTokenAsync(credentials);
             if (authToken != null)
             {
                 AuthToken = authToken;
+                await SaveTokenAsync(authToken);
 
-                UserModel saveCredentials = new UserModel(credentials.Id);
-                saveCredentials.Email = credentials.Email;
-                if (!saveLogin)
-                {
-                    saveCredentials.Password = credentials.Password;
-                }
-                await SaveCredentialsAsync(saveCredentials);
-
-                User = credentials;
-                LoginState = State.LoggedIn;
+                IsLoggedIn = true;
 
                 return true;
             }
             return false;
         }
 
-        private async Task loadCredentialsAsync()
+        async public Task<bool> LogoutAsync()
         {
-            User = null;
-            ExistenceCheckResult res = await loginFolder.CheckExistsAsync(CURRENT_LOGIN_FILE);
+            if (AuthToken != null)
+            {
+                await DeleteTokenAsync();
+                AuthToken = null;
+                IsLoggedIn = false;
+
+                return true;
+            }
+            return false;
+        }
+
+        private async Task loadTokenAsync()
+        {
+            AuthToken = null;
+            ExistenceCheckResult res = await loginFolder.CheckExistsAsync(CURRENT_TOKEN_FILE);
             if (res.Equals(ExistenceCheckResult.FileExists))
             {
-                IFile file = await loginFolder.GetFileAsync(CURRENT_LOGIN_FILE);
+                IFile file = await loginFolder.GetFileAsync(CURRENT_TOKEN_FILE);
                 string json = await file.ReadAllTextAsync();
-                User = JsonConvert.DeserializeObject<UserModel>(json);
+                AuthToken = JsonConvert.DeserializeObject<AuthToken>(json);
             }
         }
 
-        private async Task SaveCredentialsAsync(UserModel user)
+        private async Task SaveTokenAsync(AuthToken authToken)
         {
-            string json = JsonConvert.SerializeObject(user);
-            IFile file = await loginFolder.CreateFileAsync(CURRENT_LOGIN_FILE, CreationCollisionOption.OpenIfExists);
+            string json = JsonConvert.SerializeObject(authToken);
+            IFile file = await loginFolder.CreateFileAsync(CURRENT_TOKEN_FILE, CreationCollisionOption.OpenIfExists);
             await file.WriteAllTextAsync(json);
+        }
+
+        private async Task DeleteTokenAsync()
+        {
+            ExistenceCheckResult res = await loginFolder.CheckExistsAsync(CURRENT_TOKEN_FILE);
+            if (res.Equals(ExistenceCheckResult.FileExists))
+            {
+                IFile file = await loginFolder.GetFileAsync(CURRENT_TOKEN_FILE);
+                await file.DeleteAsync();
+            }
         }
     }
 }
