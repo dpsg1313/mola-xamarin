@@ -12,6 +12,11 @@ namespace MolaApp.Api
     {
         string baseUrl = "http://encala.de/";
 
+        public Task<bool> UpdateAsync(ProfileModel profile)
+        {
+            throw new NotImplementedException();
+        }
+
         protected override string GetBaseUrl()
         {
             return baseUrl;

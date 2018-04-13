@@ -10,6 +10,6 @@ namespace MolaApp.Api
     {
         Task CreateAsync(UserModel model);
 
-        Task<AuthToken> GetTokenAsync(UserModel user);
+        Task<AuthToken> GetTokenAsync(UserModel credentials);
     }
 }

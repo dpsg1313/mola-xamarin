@@ -66,7 +66,7 @@ namespace MolaApp.Page
             try
             {
                 await userApi.CreateAsync(model);
-                await Navigation.PopModalAsync();
+                await Navigation.PopAsync();
             }
             catch (ConflictException ex)
             {
@@ -83,7 +83,7 @@ namespace MolaApp.Page
 
         async void CancelAsync(object sender, EventArgs e)
         {
-            await Navigation.PopModalAsync();
+            await Navigation.PopAsync();
         }
     }
 

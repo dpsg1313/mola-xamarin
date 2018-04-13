@@ -29,7 +29,7 @@ namespace MolaApp.Page
         async void RegisterAsync(object sender, EventArgs e)
         {
             RegistrationPage registrationPage = new RegistrationPage(Container);
-            await Navigation.PushModalAsync(registrationPage);
+            await Navigation.PushAsync(registrationPage);
         }
 
         async void ScanAsync(object sender, EventArgs e)

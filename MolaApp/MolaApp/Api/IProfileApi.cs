@@ -8,6 +8,6 @@ namespace MolaApp.Api
 {
     public interface IProfileApi : IApi<ProfileModel>
     {
-
+        Task<bool> UpdateAsync(ProfileModel profile);
     }
 }

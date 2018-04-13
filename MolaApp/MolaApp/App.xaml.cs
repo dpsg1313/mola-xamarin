@@ -16,9 +16,8 @@ namespace MolaApp
 
 		public App ()
 		{
-			InitializeComponent();
-
             MainPage = new LoadingPage();
+            InitializeComponent();
         }
 
 		protected override async void OnStart ()

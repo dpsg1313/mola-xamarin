@@ -34,6 +34,11 @@ namespace MolaApp
             loginFolder = await rootFolder.CreateFolderAsync(TOKEN_FOLDER, CreationCollisionOption.OpenIfExists);
 
             await loadTokenAsync();
+
+            if(AuthToken != null)
+            {
+                IsLoggedIn = true;
+            }
         }
 
         async public Task<bool> LoginAsync(UserModel credentials)

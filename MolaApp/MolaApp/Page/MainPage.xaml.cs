@@ -39,6 +39,13 @@ namespace MolaApp.Page
             return true;
         }
 
+        async void EditProfileAsync(object sender, EventArgs e)
+        {
+            ProfileModel profile = await profileRepo.GetAsync(authController.AuthToken.UserId);
+            ProfileEditPage profilePage = new ProfileEditPage(Container, profile);
+            await Navigation.PushAsync(profilePage);
+        }
+
         async void LogoutAsync(object sender, EventArgs e)
         {
             bool result = await DisplayAlert("Logout", "Willst du dich wirklich ausloggen?", "Ja", "Nein");
@@ -88,7 +95,7 @@ namespace MolaApp.Page
                 // show error message
             }
 
-            var profilePage = new ProfilePage(Container, profile);
+            ProfilePage profilePage = new ProfilePage(Container, profile);
 
             await Navigation.PushAsync(profilePage);
         }

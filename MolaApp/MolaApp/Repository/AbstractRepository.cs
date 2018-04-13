@@ -8,7 +8,7 @@ namespace MolaApp.Repository
 {
     abstract class AbstractRepository<T> where T : IModel
     {
-        ConcurrentDictionary<string, T> _dict = new ConcurrentDictionary<string, T>();
+        protected ConcurrentDictionary<string, T> _dict = new ConcurrentDictionary<string, T>();
         IFolder folder;
 
         async public Task InitAsync()

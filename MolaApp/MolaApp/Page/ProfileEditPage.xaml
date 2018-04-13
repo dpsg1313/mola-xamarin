@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<mp:MolaPage xmlns="http://xamarin.com/schemas/2014/forms"
+          xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+          xmlns:mp="clr-namespace:MolaApp.Page"
+          x:Class="MolaApp.Page.ProfileEditPage"
+             Title="Mein Profil bearbeiten">
+
+
+    <ScrollView>
+        <StackLayout>
+            <Image x:Name="picture" Margin="50, 10" Source="avatar.png">
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer
+                    Tapped="PictureOptionsAsync"
+                    NumberOfTapsRequired="1" />
+                </Image.GestureRecognizers>
+            </Image>
+
+            <Label Text="Du musst nur deinen Namen angeben, alle anderen Angaben sind freiwillig"
+                    VerticalOptions="Center" 
+                    HorizontalOptions="CenterAndExpand" 
+                    Margin="5, 2"/>
+
+            <Label Text="Name"
+                   VerticalOptions="End"
+                   HorizontalOptions="StartAndExpand" 
+                   Margin="5, 0"/>
+            <Entry x:Name="nameEntry"
+                   VerticalOptions="Start"
+                   HorizontalOptions="FillAndExpand" 
+                   Text="{Binding Name}" />
+
+            <Label Text="Stammmesnummer"
+                   VerticalOptions="End"
+                   HorizontalOptions="StartAndExpand" 
+                   Margin="5, 0"/>
+            <Entry x:Name="tribeIdEntry"
+                   VerticalOptions="Start"
+                   HorizontalOptions="FillAndExpand" 
+                   Text="{Binding TribeId}"
+                   Keyboard="Numeric" />
+
+            <Label Text="Anzahl Klötzchen (Woodbadge)"
+                   VerticalOptions="End"
+                   HorizontalOptions="StartAndExpand" 
+                   Margin="5, 0"/>
+            <Entry x:Name="woodbadgeEntry"
+                   VerticalOptions="Start"
+                   HorizontalOptions="FillAndExpand" 
+                   Text="{Binding WoodbadgeCount}"
+                   Keyboard="Numeric" />
+
+            <!--
+            <EntryCell Label="Handynummer" Text="{Binding Path=Phone}" Keyboard="Telephone"/>
+            <EntryCell Label="E-Mail" Text="{Binding Path=Mail}" Keyboard="Email"/>
+            <EntryCell Label="Wohnort" Text="{Binding Path=Residence}" />
+            <EntryCell Label="Amt oder Funktion" Text="{Binding Path=Function}" />
+            <SwitchCell Text="Georgspunkte anzeigen" On="{Binding Path=showGeorgesPoints}" />
+            -->
+
+
+            <StackLayout Orientation="Horizontal">
+                <Button x:Name="saveButton" 
+                        Text="Speichern" 
+                        Clicked="SaveAsync" 
+                        BackgroundColor="LawnGreen"/>
+                <Button x:Name="cancelButton" 
+                        Text="Abbrechen"  
+                        Clicked="CancelAsync"/>
+            </StackLayout>
+            
+        </StackLayout>
+    </ScrollView>
+</mp:MolaPage>

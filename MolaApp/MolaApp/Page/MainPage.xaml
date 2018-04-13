@@ -13,8 +13,10 @@
     </mp:MolaPage.Padding>
 
     <StackLayout>
-        <Button x:Name="loginButton" Text="Logout" Clicked="LogoutAsync" />
-        
+        <Button x:Name="logoutButton" Text="Logout" Clicked="LogoutAsync" />
+
+        <Button x:Name="editProfileButton" Text="Mein Profil bearbeiten" Clicked="EditProfileAsync" />
+
         <Button x:Name="scanButton" Text="Scan Code" Clicked="ScanAsync" />
 
     </StackLayout>

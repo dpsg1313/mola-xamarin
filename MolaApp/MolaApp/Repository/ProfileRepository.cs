@@ -22,6 +22,12 @@ namespace MolaApp.Repository
         {
             return await api.GetAsync(id);
         }
+
+        public async void PutAsync(ProfileModel profile)
+        {
+            _dict.AddOrUpdate(profile.Id, profile, (key, oldValue) => profile);
+            await api.UpdateAsync(profile);
+        }
     }
 
     
