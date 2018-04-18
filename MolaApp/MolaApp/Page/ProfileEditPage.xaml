@@ -8,6 +8,11 @@
 
     <ScrollView>
         <StackLayout>
+            <Label Text="Was du nicht ausfüllst, wird in deinem Profil nicht angezeigt. Entscheide selbst!"
+                   VerticalOptions="End"
+                   HorizontalOptions="StartAndExpand" 
+                   Margin="5, 0"/>
+            
             <Image x:Name="picture" Margin="50, 10" Source="avatar.png">
                 <Image.GestureRecognizers>
                     <TapGestureRecognizer
@@ -15,11 +20,6 @@
                     NumberOfTapsRequired="1" />
                 </Image.GestureRecognizers>
             </Image>
-
-            <Label Text="Du musst nur deinen Namen angeben, alle anderen Angaben sind freiwillig"
-                    VerticalOptions="Center" 
-                    HorizontalOptions="CenterAndExpand" 
-                    Margin="5, 2"/>
 
             <Label Text="Name"
                    VerticalOptions="End"
@@ -30,34 +30,105 @@
                    HorizontalOptions="FillAndExpand" 
                    Text="{Binding Name}" />
 
-            <Label Text="Stammmesnummer"
+            <Label Text="Diözese"
                    VerticalOptions="End"
                    HorizontalOptions="StartAndExpand" 
                    Margin="5, 0"/>
-            <Entry x:Name="tribeIdEntry"
-                   VerticalOptions="Start"
-                   HorizontalOptions="FillAndExpand" 
-                   Text="{Binding TribeId}"
-                   Keyboard="Numeric" />
+            <Picker x:Name="diocesePicker"
+                    Title="Wähle deine Diözese aus"
+                    VerticalOptions="Start"
+                    HorizontalOptions="FillAndExpand"
+                    ItemsSource="{Binding DioceseList}"
+                    ItemDisplayBinding="{Binding Name}"
+                    SelectedItem="{Binding SelectedDiocese}"
+                    SelectedIndexChanged="SelectedDioceseChanged" />
+
+            <Label Text="Bezirk"
+                   VerticalOptions="End"
+                   HorizontalOptions="StartAndExpand" 
+                   Margin="5, 0"/>
+            <Picker x:Name="regionPicker"
+                    Title="Wähle deinen Bezirk aus"
+                    VerticalOptions="Start"
+                    HorizontalOptions="FillAndExpand"
+                    ItemsSource="{Binding RegionList}"
+                    ItemDisplayBinding="{Binding Name}"
+                    SelectedItem="{Binding SelectedRegion}"
+                    SelectedIndexChanged="SelectedRegionChanged" />
+
+            <Label Text="Stamm"
+                   VerticalOptions="End"
+                   HorizontalOptions="StartAndExpand" 
+                   Margin="5, 0"/>
+            <Picker x:Name="tribePicker"
+                    Title="Wähle deinen Stamm aus"
+                    VerticalOptions="Start"
+                    HorizontalOptions="FillAndExpand"
+                    ItemsSource="{Binding TribeList}"
+                    ItemDisplayBinding="{Binding Name}"
+                    SelectedItem="{Binding SelectedTribe}" />
+
+            <Label Text="Amt / Funktion"
+                   VerticalOptions="End"
+                   HorizontalOptions="StartAndExpand" 
+                   Margin="5, 0"/>
+            <Picker x:Name="functionPicker"
+                    Title="Wähle deine Funktion aus"
+                    VerticalOptions="Start"
+                    HorizontalOptions="FillAndExpand"
+                    ItemsSource="{Binding FunctionList}"
+                    ItemDisplayBinding="{Binding Name}"
+                    SelectedItem="{Binding SelectedFunction}" />
 
             <Label Text="Anzahl Klötzchen (Woodbadge)"
                    VerticalOptions="End"
                    HorizontalOptions="StartAndExpand" 
                    Margin="5, 0"/>
-            <Entry x:Name="woodbadgeEntry"
+            <Picker x:Name="woodbadgePicker"
+                    Title="Wie viele Klötzchen hast du?"
+                    VerticalOptions="Start"
+                    HorizontalOptions="FillAndExpand"
+                    ItemsSource="{Binding WoodbadgeList}"
+                    SelectedItem="{Binding WoodbadgeCount}" />
+
+            <Label Text="Handynummer"
+                   VerticalOptions="End"
+                   HorizontalOptions="StartAndExpand" 
+                   Margin="5, 0"/>
+            <Entry x:Name="phoneEntry"
+                   VerticalOptions="Start"
+                   HorizontalOptions="FillAndExpand"
+                   Keyboard="Telephone"
+                   Text="{Binding Phone}" />
+
+            <Label Text="E-Mail"
+                   VerticalOptions="End"
+                   HorizontalOptions="StartAndExpand" 
+                   Margin="5, 0"/>
+            <Entry x:Name="mailEntry"
                    VerticalOptions="Start"
                    HorizontalOptions="FillAndExpand" 
-                   Text="{Binding WoodbadgeCount}"
-                   Keyboard="Numeric" />
+                   Keyboard="Email"
+                   Text="{Binding Mail}" />
 
-            <!--
-            <EntryCell Label="Handynummer" Text="{Binding Path=Phone}" Keyboard="Telephone"/>
-            <EntryCell Label="E-Mail" Text="{Binding Path=Mail}" Keyboard="Email"/>
-            <EntryCell Label="Wohnort" Text="{Binding Path=Residence}" />
-            <EntryCell Label="Amt oder Funktion" Text="{Binding Path=Function}" />
-            <SwitchCell Text="Georgspunkte anzeigen" On="{Binding Path=showGeorgesPoints}" />
-            -->
+            <Label Text="Wohnort"
+                   VerticalOptions="End"
+                   HorizontalOptions="StartAndExpand" 
+                   Margin="5, 0"/>
+            <Entry x:Name="residenceEntry"
+                   VerticalOptions="Start"
+                   HorizontalOptions="FillAndExpand" 
+                   Text="{Binding Residence}" />
 
+            <Label Text="'Originale' Georgspunkte"
+                   VerticalOptions="End"
+                   HorizontalOptions="StartAndExpand" 
+                   Margin="5, 0"/>
+            <Entry x:Name="georgesPointsEntry"
+                   VerticalOptions="Start"
+                   HorizontalOptions="FillAndExpand" 
+                   Keyboard="Numeric"
+                   Text="{Binding GeorgesPoints}" />
 
             <StackLayout Orientation="Horizontal">
                 <Button x:Name="saveButton" 

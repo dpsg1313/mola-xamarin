@@ -19,8 +19,8 @@ namespace MolaApp.Api.Stub
             {
                 Name = "Florian Kick",
                 Residence = "Unterhaching",
-                FavouriteStage = "Jupfis",
-                Function = "BeVo",
+                FavouriteStage = "Jungpfadfinder",
+                FunctionId = "2-2",
                 WoodbadgeCount = 2
             });
 
@@ -28,8 +28,8 @@ namespace MolaApp.Api.Stub
             {
                 Name = "Max Mustermann",
                 Residence = "Hinterhugelhapfing",
-                FavouriteStage = "Pfadis",
-                Function = "Leiter",
+                FavouriteStage = "Pfadfinder",
+                FunctionId = "1-1",
                 WoodbadgeCount = 0
             });
 
@@ -38,7 +38,7 @@ namespace MolaApp.Api.Stub
                 Name = "Gutemiene Mecklenburger-Mühlbauer",
                 Residence = "Friedrichshafen am Bodensee",
                 FavouriteStage = "Rover",
-                Function = "Diözesanreferent*in",
+                FunctionId = "3-4",
                 WoodbadgeCount = 3
             });
         }

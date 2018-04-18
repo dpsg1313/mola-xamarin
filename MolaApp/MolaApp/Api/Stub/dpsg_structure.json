@@ -1,0 +1,52 @@
+{
+  "Dioceses": {
+    "01": {
+      "Regions": {
+        "01/01": {
+          "Tribes": {
+            "01/01/03": {
+              "Name": "Krefeld, Inrath",
+              "Id": "01/01/03",
+              "RegionId": "01/01",
+              "DioceseId": "01"
+            },
+            "01/01/05": {
+              "Name": "Krefeld, Linn",
+              "Id": "01/01/05",
+              "RegionId": "01/01",
+              "DioceseId": "01"
+            }
+          },
+          "Name": "Rheinbezirk",
+          "Id": "01/01",
+          "DioceseId": "01"
+        }
+      },
+      "Name": "Aachen",
+      "Id": "01",
+      "HasRegions": true
+    }
+  },
+  "Functions": [
+    {
+      "Id": "1-1",
+      "Name": "Leiter",
+      "Level": "Tribe"
+    },
+    {
+      "Id": "1-2",
+      "Name": "Stammesvorstand",
+      "Level": "Tribe"
+    },
+    {
+      "Id": "2-2",
+      "Name": "Bezirksvorstand",
+      "Level": "Region"
+    },
+    {
+      "Id": "3-4",
+      "Name": "Diözesanreferent",
+      "Level": "Diocese"
+    }
+  ]
+}

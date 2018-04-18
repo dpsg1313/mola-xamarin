@@ -10,13 +10,13 @@ namespace MolaApp.Model
 
         public string Name { get; set; }
         public string TribeId { get; set; }
-        public string DistrictId { get; set; }
+        public string RegionId { get; set; }
         public string DioceseId { get; set; }
+        public string FunctionId { get; set; }
 
         public string Phone { get; set; }
         public string Mail { get; set; }
         public string Residence { get; set; }
-        public string Function { get; set; }
         public string FavouriteStage { get; set; }
         public string Description { get; set; }
 

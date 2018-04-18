@@ -20,6 +20,8 @@ namespace MolaApp.Page
 		{
             this.BindingContext = profile;
 
+            Title = profile.Name;
+
             InitializeComponent ();
 		}
 	}

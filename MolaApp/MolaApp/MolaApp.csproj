@@ -5,6 +5,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Api\Stub\dpsg_structure.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Api\Stub\dpsg_structure.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
     <PackageReference Include="PCLStorage" Version="1.0.2" />
     <PackageReference Include="Xam.Plugin.Media" Version="3.1.3" />

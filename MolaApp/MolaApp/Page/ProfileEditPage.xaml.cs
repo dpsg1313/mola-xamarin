@@ -22,18 +22,91 @@ namespace MolaApp.Page
 
         ProfileRepository profileRepo;
 
+        StructureController structureController;
+
+        Dictionary<string, string> dioceseNameToId = new Dictionary<string, string>();
+
+        public IList<Diocese> Dioceses;
+
+        ProfileEditViewModel viewModel;
+
         public ProfileEditPage(ServiceContainer container, ProfileModel profile) : base(container)
         {
             profileRepo = Container.Get<ProfileRepository>("repository/profile");
 
-            model = profile;
-            this.BindingContext = profile;
+            structureController = Container.Get<StructureController>("structure");
 
-            InitializeComponent ();
+            InitializeComponent();
+
+            model = profile;
+
+            viewModel = new ProfileEditViewModel();
+            BindingContext = viewModel;
+            
+            viewModel.DioceseList = structureController.Structure.Dioceses.Values.ToList();
+            viewModel.FunctionList = structureController.Structure.Functions;
+        }
+
+        void SelectedDioceseChanged(object sender, EventArgs e)
+        {
+            if(viewModel.SelectedDiocese != null)
+            {
+                Diocese diocese = viewModel.SelectedDiocese;
+
+                if (diocese.HasRegions)
+                {
+                    // Reset region and enable and fill picker
+                    viewModel.RegionList = diocese.Regions.Values.ToList();
+                    viewModel.SelectedRegion = null;
+                    regionPicker.IsEnabled = true;
+
+                    // reset tribe and disable picker
+                    viewModel.SelectedTribe = null;
+                    tribePicker.IsEnabled = false;
+                }
+                else
+                {
+                    // Reset region and disable picker
+                    viewModel.RegionList = new List<Region>();
+                    viewModel.SelectedRegion = null;
+                    regionPicker.IsEnabled = false;
+
+                    // reset tribe and enable and fill picker
+                    viewModel.TribeList = diocese.Tribes.Values.ToList();
+                    viewModel.SelectedTribe = null;
+                    tribePicker.IsEnabled = true;
+                }
+            }
+            else
+            {
+                viewModel.SelectedRegion = null;
+                regionPicker.IsEnabled = false;
+                viewModel.SelectedTribe = null;
+                tribePicker.IsEnabled = false;
+            }
+        }
+
+        void SelectedRegionChanged(object sender, EventArgs e)
+        {
+            if (viewModel.SelectedRegion != null)
+            {
+                Region region = viewModel.SelectedRegion;
+
+                // reset tribe and enable and fill picker
+                viewModel.TribeList = region.Tribes.Values.ToList();
+                viewModel.SelectedTribe = null;
+                tribePicker.IsEnabled = true;
+            }
+            else
+            {
+                viewModel.SelectedTribe = null;
+                tribePicker.IsEnabled = false;
+            }
         }
 
         async void SaveAsync(object sender, EventArgs e)
         {
+            viewModel.WriteToModel(model);
             profileRepo.PutAsync(model);
             await Navigation.PopAsync();
         }
