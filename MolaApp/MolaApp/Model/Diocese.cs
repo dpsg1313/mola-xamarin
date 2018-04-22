@@ -7,19 +7,19 @@ namespace MolaApp.Model
 {
     public class Diocese
     {
-        [JsonProperty("Name")]
+        [JsonProperty("name")]
         public string Name { get; protected set; }
 
-        [JsonProperty("Id")]
+        [JsonProperty("id")]
         public string Id { get; protected set; }
 
-        [JsonProperty("HasRegions")]
+        [JsonProperty("hasRegions")]
         public bool HasRegions { get; protected set; }
 
-        [JsonProperty("Regions")]
+        [JsonProperty("regions")]
         public readonly IDictionary<string, Region> Regions;
 
-        [JsonProperty("Tribes")]
+        [JsonProperty("tribes")]
         public readonly IDictionary<string, Tribe> Tribes;
     }
 }

@@ -17,7 +17,21 @@
 
         <Button x:Name="editProfileButton" Text="Mein Profil bearbeiten" Clicked="EditProfileAsync" />
 
-        <Button x:Name="scanButton" Text="Scan Code" Clicked="ScanAsync" />
+        <Button x:Name="bookmarksButton" Text="Merkliste" Clicked="BookmarksAsync" />
+        
+        <Button x:Name="historyButton" Text="Historie" Clicked="HistoryAsync" />
+        
+        <Image x:Name="scanButton"
+            HeightRequest="150"
+            Source="scan_qrcode.png"
+            VerticalOptions="Center" 
+            HorizontalOptions="Center">
+            <Image.GestureRecognizers>
+                <TapGestureRecognizer
+                    Tapped="ScanAsync"
+                     NumberOfTapsRequired="1" />
+            </Image.GestureRecognizers>
+        </Image>
 
     </StackLayout>
 

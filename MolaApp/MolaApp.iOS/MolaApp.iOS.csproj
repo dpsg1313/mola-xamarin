@@ -119,6 +119,12 @@
     <Reference Include="Xamarin.iOS" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="akavache">
+      <Version>5.0.0</Version>
+    </PackageReference>
+    <PackageReference Include="AWSSDK.S3">
+      <Version>3.3.18</Version>
+    </PackageReference>
     <PackageReference Include="Xam.Plugin.Media">
       <Version>3.1.3</Version>
     </PackageReference>
@@ -133,5 +139,22 @@
       <Project>{B3A2EF10-EC08-406E-8801-0EC9BCB4706D}</Project>
       <Name>MolaApp</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ImageAsset Include="Media.xcassets\App-Symbole.appiconset\Contents.json">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Media.xcassets\Startbilder.launchimage\Contents.json">
+      <Visible>false</Visible>
+    </ImageAsset>
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\avatar.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\woodbadge_200.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\georgspunkte_256.png" />
   </ItemGroup>
 </Project>

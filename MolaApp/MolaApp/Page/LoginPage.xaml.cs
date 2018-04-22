@@ -23,6 +23,8 @@ namespace MolaApp.Page
         public LoginPage (ServiceContainer container) : base(container)
 		{
 			InitializeComponent ();
+            BindingContext = this;
+
             authController = Container.Get<AuthController>("auth");
         }
 
@@ -62,8 +64,6 @@ namespace MolaApp.Page
             await Task.Run(() => waitHandle.WaitOne());
 
             scanLabel.Text = userId;
-            scanButton.Text = "Anderen Code scannen";
-            scanButton.BackgroundColor = Color.Gray;
         }
 
         async void LoginAsync(object sender, EventArgs e)

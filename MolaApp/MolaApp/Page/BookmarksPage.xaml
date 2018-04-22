@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<mp:MolaPage xmlns="http://xamarin.com/schemas/2014/forms"
+                xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                xmlns:mp="clr-namespace:MolaApp.Page"
+                x:Class="MolaApp.Page.BookmarksPage"
+                Title="Merkliste">
+
+    <ListView x:Name="bookmarkList" ItemsSource="{Binding Bookmarks}" ItemTapped="OnItemTapped">
+        <ListView.ItemTemplate>
+            <DataTemplate>
+                <ImageCell Text="{Binding Label}" ImageSource="{Binding Image}" />
+            </DataTemplate>
+        </ListView.ItemTemplate>
+    </ListView>
+</mp:MolaPage>

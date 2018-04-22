@@ -8,13 +8,11 @@ namespace MolaApp
     {
         public string UserId { get; }
         public string Token { get; }
-        public DateTimeOffset Expires { get; }
 
-        public AuthToken(string userId, string token, DateTimeOffset expires)
+        public AuthToken(string userId, string token)
         {
             UserId = userId;
             Token = token;
-            Expires = expires;
         }
     }
 }

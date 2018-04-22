@@ -7,16 +7,16 @@ namespace MolaApp.Model
 {
     public class Tribe
     {
-        [JsonProperty("Name")]
+        [JsonProperty("name")]
         public string Name { get; protected set; }
 
-        [JsonProperty("Id")]
+        [JsonProperty("id")]
         public string Id { get; protected set; }
 
-        [JsonProperty("RegionId")]
+        [JsonProperty("regionId")]
         public string RegionId { get; protected set; }
 
-        [JsonProperty("DioceseId")]
+        [JsonProperty("dioceseId")]
         public string DioceseId { get; protected set; }
     }
 }

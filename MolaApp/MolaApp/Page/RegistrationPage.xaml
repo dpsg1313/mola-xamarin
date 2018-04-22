@@ -7,58 +7,82 @@
 
     <ContentPage.Resources>
         <ResourceDictionary>
-            <mp:StringEmptyToBooleanConverter x:Key="stringEmptyConverter" />
+            <mp:EmptyStringToFalseConverter x:Key="emptyToFalse" />
+            <mp:EmptyStringToTrueConverter x:Key="emptyToTrue" />
         </ResourceDictionary>
     </ContentPage.Resources>
 
-    <StackLayout>
+    <ScrollView>
+        <StackLayout>
 
-        <Label x:Name="scanLabel" 
-               Text="Damit wir den Code auf deinem Aufnäher deinem Profil zuordnen können, musst du ihn bitte einmal scannen"
-               VerticalOptions="CenterAndExpand" 
-               HorizontalOptions="CenterAndExpand"
-               IsVisible="{Binding ScannedId, Converter=stringEmptyConverter}"/>
-        <Label x:Name="codeErrorLabel" 
-               Text="" 
-               IsVisible="{Binding ScannedId, Converter=stringEmptyConverter}" />
-        <Button x:Name="scanButton" 
-                Text="Jetzt meinen Aufnäher scannen" 
-                Clicked="ScanAsync" 
-                BackgroundColor="AliceBlue"
-                IsVisible="{Binding ScannedId, Converter=stringEmptyConverter}" />
+            <Label Text="Scanne deinen Aufnäher um ihn mit dem neuen Account zu verknüpfen!"
+                    FontSize="Large"
+                    VerticalOptions="Start" 
+                    HorizontalOptions="CenterAndExpand" />
 
-        <Label x:Name="codeLabel" Text="{Binding ScannedId}"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand"
-               IsVisible="{Binding ScannedId, Converter=stringEmptyConverter, ConverterParameter=true}" />
-        
-        <Entry x:Name="emailEntry" 
-               Placeholder="Email-Adresse" 
-               IsVisible="{Binding ScannedId, Converter=stringEmptyConverter, ConverterParameter=true}" />
-        <Label x:Name="emailErrorLabel" 
-               Text="" 
-               IsVisible="{Binding ScannedId, Converter=stringEmptyConverter, ConverterParameter=true}" />
+            <Label Text="Dein Code lautet"
+                   Margin="10, 30, 10, 0"
+                   FontSize="Large"
+                    VerticalOptions="Center" 
+                    HorizontalOptions="Center"
+                   IsVisible="{Binding ScannedId, Converter={StaticResource emptyToFalse}}"/>
+            <Label Text="{Binding ScannedId}"
+                   Margin="10, 10, 10, 0"
+                   FontSize="Medium"
+                   TextColor="LightSteelBlue"
+                    VerticalOptions="Center" 
+                    HorizontalOptions="Center"
+                   IsVisible="{Binding ScannedId, Converter={StaticResource emptyToFalse}}"/>
 
-        <Entry x:Name="passwordEntry" 
+            <Image x:Name="scanButton"
+                   Margin="10, 20, 10, 0"
+                   HeightRequest="100"
+                   Source="scan_qrcode.png"
+                   VerticalOptions="Center" 
+                   HorizontalOptions="Center"
+                   IsVisible="{Binding ScannedId, Converter={StaticResource emptyToTrue}}" >
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer
+                        Tapped="ScanAsync"
+                        NumberOfTapsRequired="1" />
+                </Image.GestureRecognizers>
+            </Image>
+
+            <Entry x:Name="passwordEntry" 
+                   Margin="10, 20, 10, 0"
                Placeholder="Passwort" 
-               IsPassword="True" 
-               IsVisible="{Binding ScannedId, Converter=stringEmptyConverter, ConverterParameter=true}" />
-        <Entry x:Name="passwordConfirmEntry"
+               IsPassword="True"  />
+            <Entry x:Name="passwordConfirmEntry"
+                   Margin="10, 0"
                Placeholder="Passwort bestätigen"
-               IsPassword="True"
-               IsVisible="{Binding ScannedId, Converter=stringEmptyConverter, ConverterParameter=true}" />
-        <Label x:Name="passwordErrorLabel" 
-               Text=""
-               IsVisible="{Binding ScannedId, Converter=stringEmptyConverter, ConverterParameter=true}" />
+               IsPassword="True"/>
 
-        <Button x:Name="registerButton" 
-                Text="Account erstellen" 
-                Clicked="RegisterAsync" 
-                BackgroundColor="LawnGreen"
-                IsVisible="{Binding ScannedId, Converter=stringEmptyConverter, ConverterParameter=true}" />
+            <Label x:Name="privacyLabel" Margin="10, 20, 10, 0"
+                    VerticalOptions="Center" 
+                    HorizontalOptions="CenterAndExpand">
+                <Label.FormattedText>
+                    <FormattedString>
+                        <Span Text="Mit Klick auf 'Account erstellen' akzeptierst du die " FontSize="Medium" />
+                        <Span Text="Datenschutzerklärung" FontAttributes="Bold" FontSize="Medium" ForegroundColor="LightSteelBlue"/>
+                    </FormattedString>
+                </Label.FormattedText>
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer
+                        Tapped="ShowPrivacyPolicy"
+                        NumberOfTapsRequired="1" />
+                </Label.GestureRecognizers>
+            </Label>
 
-        <Button x:Name="cancelButton" 
+            <StackLayout Orientation="Horizontal" Margin="0, 20, 0, 0" VerticalOptions="Center" HorizontalOptions="CenterAndExpand">
+                <Button x:Name="registerButton" 
+                    Text="Account erstellen" 
+                    Clicked="RegisterAsync" 
+                    IsEnabled="{Binding ScannedId, Converter={StaticResource emptyToFalse}}" />
+
+                <Button x:Name="cancelButton" 
                     Text="Abbrechen"  
                     Clicked="CancelAsync" />
-    </StackLayout>
+            </StackLayout>
+        </StackLayout>
+    </ScrollView>
 </mp:MolaPage>

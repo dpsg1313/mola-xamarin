@@ -5,40 +5,50 @@
                 x:Class="MolaApp.Page.LoginPage"
                 Title="Login">
 
-    <StackLayout>
-        <Label Text="Du hast noch keinen Account?"
-                VerticalOptions="Start" 
-                HorizontalOptions="CenterAndExpand" />
-
-        <Button x:Name="registerButton" 
-                Text="Registrieren" 
-                Clicked="RegisterAsync" 
-                VerticalOptions="Start" 
-                HorizontalOptions="CenterAndExpand" />
-
-        <Label x:Name="scanLabel"
-               Text="Scanne deinen Code um dich anzumelden!"
-               VerticalOptions="Start" 
+    <ScrollView>
+        <StackLayout HorizontalOptions="CenterAndExpand">
+            <Label x:Name="scanLabel"
+               Text="Scanne deinen Aufnäher um dich anzumelden!"
+               VerticalOptions="Center" 
                HorizontalOptions="CenterAndExpand" />
 
-        <Button x:Name="scanButton" 
-                Text="Meinen Aufnäher scannen" 
-                Clicked="ScanAsync" 
-                BackgroundColor="AliceBlue"
-                VerticalOptions="Start" 
-                HorizontalOptions="CenterAndExpand" />
-
-        <Entry x:Name="passwordEntry" 
+            <Image x:Name="scanButton"
+               Margin="50, 10, 50, 20"
+                   HeightRequest="150"
+               Source="scan_qrcode.png"
+               VerticalOptions="Center" 
+               HorizontalOptions="Center">
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer
+                    Tapped="ScanAsync"
+                    NumberOfTapsRequired="1" />
+                </Image.GestureRecognizers>
+            </Image>
+            
+            <Entry x:Name="passwordEntry" 
                 Placeholder="Passwort" 
                 IsPassword="True"
                 VerticalOptions="Start" 
                 HorizontalOptions="CenterAndExpand"/>
 
-        <Button x:Name="loginButton" 
+            <Button x:Name="loginButton" 
                 Text="Anmelden" 
                 Clicked="LoginAsync" 
                 BackgroundColor="LawnGreen"
                 VerticalOptions="Start" 
                 HorizontalOptions="CenterAndExpand" />
-    </StackLayout>
+
+            <StackLayout Orientation="Horizontal" VerticalOptions="EndAndExpand" HorizontalOptions="CenterAndExpand" Margin="0, 20, 0, 0">
+                <Label Text="Du hast noch keinen Account?"
+                VerticalOptions="End" 
+                HorizontalOptions="CenterAndExpand" />
+
+                <Button x:Name="registerButton" 
+                Text="Registrieren" 
+                Clicked="RegisterAsync" 
+                VerticalOptions="End" 
+                HorizontalOptions="Center" />
+            </StackLayout>
+        </StackLayout>
+    </ScrollView>
 </mp:MolaPage>

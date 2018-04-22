@@ -1,10 +1,7 @@
 ﻿using MolaApp.Model;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Text;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 
 namespace MolaApp.Api.Stub
@@ -41,6 +38,13 @@ namespace MolaApp.Api.Stub
                 FunctionId = "3-4",
                 WoodbadgeCount = 3
             });
+        }
+
+        public IObservable<ProfileModel> Get(string id)
+        {
+            ProfileModel model = null;
+            dict.TryGetValue(id, out model);
+            return Observable.Return(model);
         }
 
         public async Task<ProfileModel> GetAsync(string id)

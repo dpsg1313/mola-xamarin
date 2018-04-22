@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<mp:MolaPage xmlns="http://xamarin.com/schemas/2014/forms"
+                xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                xmlns:mp="clr-namespace:MolaApp.Page"
+                x:Class="MolaApp.Page.HistoryPage"
+                Title="Historie">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <mp:ListViewHistoryComparer x:Key="historyComparer" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ListView x:Name="historyList" ItemsSource="{Binding History}" ItemTapped="OnItemTapped">
+        <ListView.ItemTemplate>
+            <DataTemplate>
+                <ImageCell Text="{Binding Label}" Detail="{Binding Date}" ImageSource="{Binding Image}" />
+            </DataTemplate>
+        </ListView.ItemTemplate>
+    </ListView>
+</mp:MolaPage>

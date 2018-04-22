@@ -1,13 +1,7 @@
 ﻿using MolaApp.Model;
 using Newtonsoft.Json;
-using PCLStorage;
-using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.IO;
-using System.Net.Http;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace MolaApp.Api.Stub

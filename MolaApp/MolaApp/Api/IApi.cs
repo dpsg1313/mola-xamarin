@@ -9,5 +9,7 @@ namespace MolaApp.Api
     public interface IApi<T> where T : IModel
     {
         Task<T> GetAsync(string id);
+
+        IObservable<T> Get(string id);
     }
 }

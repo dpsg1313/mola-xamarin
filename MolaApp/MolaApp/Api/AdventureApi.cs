@@ -10,11 +10,14 @@ namespace MolaApp.Api
 {
     class AdventureApi : AbstractApi<AdventureModel>, IAdventureApi
     {
-        string baseUrl = "http://encala.de/";
-
-        protected override string GetBaseUrl()
+        public AdventureApi(HttpClient httpClient) : base(httpClient)
         {
-            return baseUrl;
+
+        }
+
+        protected override string ObjectName()
+        {
+            return "adventure";
         }
     }
 }

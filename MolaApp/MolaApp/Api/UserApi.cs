@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Diagnostics;
 using System.Net;
 using System.Net.Http;
 using System.Text;
@@ -14,56 +15,47 @@ namespace MolaApp.Api
         public static string ConflictFieldEmail = "email";
         public static string ConflictFieldId = "id";
 
-        string baseUrl = "http://encala.de/";
-
-        protected override string GetBaseUrl()
+        public UserApi(HttpClient httpClient) : base(httpClient)
         {
-            return baseUrl;
+
+        }
+
+        protected override string ObjectName()
+        {
+            return "user";
         }
 
         public async Task CreateAsync(UserModel model)
         {
-            string url = GetBaseUrl();
-            Uri uri = new Uri(url);
+            string path = ObjectName();
+            HttpContent content = CreateJsonContent(model);
 
-            HttpContent content = new StringContent(JsonConvert.SerializeObject(model));
-
-            HttpResponseMessage response = await client.PostAsync(uri, content);
+            HttpResponseMessage response = await client.PostAsync(path, content);
             if (response.IsSuccessStatusCode)
             {
                 return;
             }
             else if(response.StatusCode == HttpStatusCode.Conflict)
             {
-                string json = await response.Content.ReadAsStringAsync();
-                JObject o = JObject.Parse(json);
-                if (o.ContainsKey("field"))
-                {
-                    string field = o.GetValue("field").ToString();
-                    throw new ConflictException(field);
-                }
+                throw new ConflictException();
             }
-            throw new Exception("Unexpected failure!");
+            else
+            {
+                throw new Exception("Unexpected failure!");
+            }
         }
 
         public async Task<AuthToken> GetTokenAsync(UserModel credentials)
         {
-            string url = GetBaseUrl() + "/login";
-            Uri uri = new Uri(url);
+            string path = "login";
+            HttpContent content = CreateJsonContent(credentials);
 
-            HttpContent content = new StringContent(JsonConvert.SerializeObject(credentials));
-
-            HttpResponseMessage response = await client.PostAsync(uri, content);
+            HttpResponseMessage response = await client.PostAsync(path, content);
             if (response.IsSuccessStatusCode)
             {
                 string json = await response.Content.ReadAsStringAsync();
-                JObject o = JObject.Parse(json);
-                if (o.ContainsKey("token") && o.ContainsKey("expires"))
-                {
-                    string token = o.GetValue("token").ToString();
-                    DateTimeOffset expires = DateTimeOffset.Parse(o.GetValue("expires").ToString());
-                    return new AuthToken(credentials.Id, token, expires);
-                }
+                string token = JsonConvert.DeserializeObject<string>(json);
+                return new AuthToken(credentials.Id, token);
             }
             return null;
         }

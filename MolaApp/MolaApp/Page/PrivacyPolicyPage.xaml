@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<mp:MolaPage xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:mp="clr-namespace:MolaApp.Page"
+    x:Class="MolaApp.Page.PrivacyPolicyPage"
+    Title="Datenschutz">
+
+
+    <ScrollView>
+        <StackLayout>
+            <Label Text="MOLA-Datenschutzrichtlinie"
+                   FontSize="Large"
+                   VerticalOptions="Center" 
+                   HorizontalOptions="CenterAndExpand" />
+            <Label Text="Letzte Änderung: 21. April 2018"
+                   VerticalOptions="Center" 
+                   HorizontalOptions="StartAndExpand" />
+            
+            <Label Text="Wir nehmen den Schutz deiner Privatsphäre sehr ernst. Mithilfe unserer Datenschutzrichtlinie erläutern wir, welche Informationen wir erheben und wie diese verarbeitet werden."
+                   VerticalOptions="Center" 
+                   HorizontalOptions="StartAndExpand" />
+
+            <Label Text="Wer steht hinter MOLA?"
+                   FontSize="Large"
+                   VerticalOptions="Center" 
+                   HorizontalOptions="StartAndExpand" />
+            <Label Text="MOLA wird betrieben von: &#10;Deutsche Pfadfinderschaft Sankt Georg, Bezirk München-Ost &#10;Vertreten durch: &#10;Florian Kick &#10;Hauptstr. 63 &#10;82008 Unterhaching"
+                   VerticalOptions="Center" 
+                   HorizontalOptions="StartAndExpand" />
+            <Label Text="Hast du Fragen zu MOLA? Schreib uns eine Email an admin@dpsg1313.de"
+                   VerticalOptions="Center" 
+                   HorizontalOptions="StartAndExpand" />
+
+            <Label Text="Was macht MOLA mit deinen Daten?"
+                   FontSize="Large"
+                   VerticalOptions="Center" 
+                   HorizontalOptions="StartAndExpand" />
+            <Label Text="Die Daten, die du während der Nutzung von MOLA bereitstellst, sowie die Daten, die von MOLA protokolliert werden, werden auf unseren Servern gespeichert"
+                   VerticalOptions="Center" 
+                   HorizontalOptions="StartAndExpand" />
+
+            <Label Text="Persönliche Daten"
+                   FontSize="Medium"
+                   VerticalOptions="Center" 
+                   HorizontalOptions="StartAndExpand" />
+            <Label Text="MOLA speichert die von dir eingebenen Account- und Profil-Daten inklusive Fotos auf unseren Servern ab, um anderen Nutzern deine Daten innerhalb der App anzeigen zu können."
+                   VerticalOptions="Center" 
+                   HorizontalOptions="StartAndExpand" />
+
+            <Label Text="Berechtigung: Kamera"
+                   FontSize="Medium"
+                   VerticalOptions="Center" 
+                   HorizontalOptions="StartAndExpand" />
+            <Label Text="Um QR-Codes zu scannen sowie zur Aufnahme von Fotos benötigt MOLA die Berechtigung, auf die Kamera deines Geräts zuzugreifen."
+                   VerticalOptions="Center" 
+                   HorizontalOptions="StartAndExpand" />
+            
+        </StackLayout>
+    </ScrollView>
+</mp:MolaPage>

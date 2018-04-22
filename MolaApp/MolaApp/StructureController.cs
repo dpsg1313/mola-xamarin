@@ -11,14 +11,17 @@ namespace MolaApp
 {
     public class StructureController
     {
-        private const string FOLDER = "structure";
-        private const string FILE = "current.json";
-
         IStructureApi api;
 
-        IFolder folder;
 
-        public DpsgStructure Structure { get; private set; }
+        DpsgStructure structure;
+        public DpsgStructure Structure
+        {
+            get
+            {
+                return structure;
+            }
+        }
 
         public StructureController(IStructureApi structureApi)
         {
@@ -27,39 +30,11 @@ namespace MolaApp
 
         async public Task InitAsync()
         {
-            IFolder rootFolder = FileSystem.Current.LocalStorage;
-            folder = await rootFolder.CreateFolderAsync(FOLDER, CreationCollisionOption.OpenIfExists);
-
-            await loadStructureAsync();
-        }
-
-        private async Task loadStructureAsync()
-        {
-            Structure = null;
-            ExistenceCheckResult res = await folder.CheckExistsAsync(FOLDER);
-            if (res.Equals(ExistenceCheckResult.FileExists))
+            structure = await api.GetAsync();
+            if(structure == null)
             {
-                IFile file = await folder.GetFileAsync(FILE);
-                string json = await file.ReadAllTextAsync();
-                Structure = JsonConvert.DeserializeObject<DpsgStructure>(json);
+                throw new Exception("Structure could not be fetched from API!");
             }
-
-            if(Structure == null)
-            {
-                DpsgStructure structure = await api.GetAsync();
-                if (structure != null)
-                {
-                    Structure = structure;
-                    await SaveStructureAsync(structure);
-                }
-            }
-        }
-
-        private async Task SaveStructureAsync(DpsgStructure structure)
-        {
-            string json = JsonConvert.SerializeObject(structure);
-            IFile file = await folder.CreateFileAsync(FILE, CreationCollisionOption.OpenIfExists);
-            await file.WriteAllTextAsync(json);
         }
     }
 }

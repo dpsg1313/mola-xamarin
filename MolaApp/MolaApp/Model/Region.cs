@@ -7,16 +7,16 @@ namespace MolaApp.Model
 {
     public class Region
     {
-        [JsonProperty("Name")]
+        [JsonProperty("name")]
         public string Name { get; protected set; }
 
-        [JsonProperty("Id")]
+        [JsonProperty("id")]
         public string Id { get; protected set; }
 
-        [JsonProperty("DioceseId")]
+        [JsonProperty("dioceseId")]
         public string DioceseId { get; protected set; }
 
-        [JsonProperty("Tribes")]
+        [JsonProperty("tribes")]
         public readonly IDictionary<string, Tribe> Tribes;
     }
 }

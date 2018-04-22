@@ -9,13 +9,13 @@ namespace MolaApp.Model
     {
         public enum Levels { Bund, Diocese, Region, Tribe };
 
-        [JsonProperty("Id")]
+        [JsonProperty("id")]
         public string Id { get; protected set; }
 
-        [JsonProperty("Name")]
+        [JsonProperty("name")]
         public string Name { get; protected set; }
 
-        [JsonProperty("Level")]
+        [JsonProperty("level")]
         public Levels Level { get; protected set; }
     }
 }

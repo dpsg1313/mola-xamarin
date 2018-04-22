@@ -4,12 +4,7 @@
              x:Class="MolaApp.Page.LoadingPage">
 
     <StackLayout>
-        <Label Text="MOLA"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
-        <ActivityIndicator Color="AliceBlue" 
-                           IsRunning="true"
-                           VerticalOptions="CenterAndExpand"
-                           HorizontalOptions="CenterAndExpand"/>
+        <Image Source="logo_hands_512.png" HorizontalOptions="Center" VerticalOptions="Center" Margin="20, 20, 20, 20"/>
+        <ActivityIndicator IsRunning="True" />
     </StackLayout>
 </ContentPage>

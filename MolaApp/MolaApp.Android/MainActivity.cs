@@ -9,7 +9,7 @@ using Android.OS;
 
 namespace MolaApp.Droid
 {
-    [Activity(Label = "MolaApp", Icon = "@drawable/icon", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+    [Activity(Label = "MolaApp", Icon = "@drawable/logo_hands", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
         protected override void OnCreate(Bundle bundle)
@@ -17,9 +17,10 @@ namespace MolaApp.Droid
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
 
-            //Plugin.CurrentActivity.CrossCurrentActivity.Current.Activity = this;
-
             base.OnCreate(bundle);
+
+            Plugin.CurrentActivity.CrossCurrentActivity.Current.Activity = this;
+            //Plugin.CurrentActivity.CrossCurrentActivity.Current.Init(this, bundle);
 
             ZXing.Net.Mobile.Forms.Android.Platform.Init();
             Xamarin.Forms.Forms.Init(this, bundle);

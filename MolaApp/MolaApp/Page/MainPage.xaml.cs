@@ -1,12 +1,7 @@
-﻿using MolaApp.Model;
-using MolaApp.Page;
-using MolaApp.Repository;
-using Newtonsoft.Json;
-using PCLStorage;
+﻿using MolaApp.Api;
+using MolaApp.Model;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Xamarin.Forms;
@@ -16,17 +11,19 @@ namespace MolaApp.Page
 {
 	public partial class MainPage : MolaPage
 	{
-        ProfileRepository profileRepo;
+        IProfileApi profileApi;
 
         AuthController authController;
+        HistoryController historyController;
 
         string scannedId;
 
 		public MainPage(ServiceContainer container) : base(container)
 		{
 			InitializeComponent();
-            profileRepo = Container.Get<ProfileRepository>("repository/profile");
+            profileApi = Container.Get<IProfileApi>("api/profile");
             authController = Container.Get<AuthController>("auth");
+            historyController = Container.Get<HistoryController>("history");
         }
 
         protected override void OnAppearing()
@@ -35,15 +32,28 @@ namespace MolaApp.Page
 
         }
 
-        protected override bool OnBackButtonPressed()
+        //protected override bool OnBackButtonPressed()
+        //{
+        //    return true;
+        //}
+
+        async void BookmarksAsync(object sender, EventArgs e)
         {
-            return true;
+            BookmarksPage bookmarksPage = new BookmarksPage(Container);
+            await Navigation.PushAsync(bookmarksPage);
+        }
+
+        async void HistoryAsync(object sender, EventArgs e)
+        {
+            HistoryPage historyPage = new HistoryPage(Container);
+            await Navigation.PushAsync(historyPage);
         }
 
         async void EditProfileAsync(object sender, EventArgs e)
         {
-            ProfileModel profile = await profileRepo.GetAsync(authController.AuthToken.UserId);
-            ProfileEditPage profilePage = new ProfileEditPage(Container, profile);
+            ProfileModel profile = await profileApi.GetAsync(authController.AuthToken.UserId);
+            ProfileEditPage profilePage = new ProfileEditPage(Container);
+            await profilePage.SetModel(profile);
             await Navigation.PushAsync(profilePage);
         }
 
@@ -52,6 +62,7 @@ namespace MolaApp.Page
             bool result = await DisplayAlert("Logout", "Willst du dich wirklich ausloggen?", "Ja", "Nein");
             if (result)
             {
+                await authController.LogoutAsync();
                 Navigation.InsertPageBefore(new LoginPage(Container), this);
                 await Navigation.PopAsync();
             }
@@ -82,22 +93,12 @@ namespace MolaApp.Page
 
             // Navigate to our scanner page
             await Navigation.PushModalAsync(scanPage);
-            System.Diagnostics.Debug.WriteLine("The modal page is now on screen, hit back button");
             await Task.Run(() => waitHandle.WaitOne());
-            System.Diagnostics.Debug.WriteLine("The modal page is dismissed, do something now");
 
             Console.WriteLine(scannedId);
-            
-            System.Diagnostics.Debug.WriteLine("Get Profile from Repo");
-            ProfileModel profile = await profileRepo.GetAsync(scannedId);
+            await historyController.SetScannedNow(scannedId);
 
-            if(profile == null)
-            {
-                // show error message
-            }
-
-            ProfilePage profilePage = new ProfilePage(Container, profile);
-
+            ProfilePage profilePage = new ProfilePage(Container, scannedId);
             await Navigation.PushAsync(profilePage);
         }
     }

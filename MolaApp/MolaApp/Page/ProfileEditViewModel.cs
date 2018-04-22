@@ -1,14 +1,68 @@
 ﻿using MolaApp.Model;
+using PCLStorage;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
+using Xamarin.Forms;
 
 namespace MolaApp.Page
 {
     class ProfileEditViewModel : INotifyPropertyChanged
     {
+        private const string NO_STAGE = "nicht anzeigen";
+        private const string NO_RELATIONSHIP_STATUS = "nicht anzeigen";
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public void WriteToModel(ProfileModel model)
+        {
+            model.DioceseId = selectedDiocese?.Id ?? "";
+            model.RegionId = selectedRegion?.Id ?? "";
+            model.TribeId = selectedTribe?.Id ?? "";
+            model.FunctionId = selectedFunction?.Id ?? "";
+
+            if(FavouriteStage == NO_STAGE)
+            {
+                model.FavouriteStage = "";
+            }
+            else
+            {
+                model.FavouriteStage = favouriteStage ?? "";
+            }
+
+            if (RelationshipStatus == NO_RELATIONSHIP_STATUS)
+            {
+                model.RelationshipStatus = "";
+            }
+            else
+            {
+                model.RelationshipStatus = relationshipStatus ?? "";
+            }
+
+            if (string.IsNullOrEmpty(georgesPoints))
+            {
+                model.GeorgesPoints = -1;
+            }
+            else
+            {
+                model.GeorgesPoints = int.Parse(georgesPoints);
+            }
+
+            model.Name = name;
+            model.Residence = residence;
+            model.Phone = phone;
+            model.Mail = mail;
+            model.WoodbadgeCount = woodbadgeCount;
+        }
+
         IList<Diocese> dioceseList;
         public IList<Diocese> DioceseList
         {
@@ -18,7 +72,7 @@ namespace MolaApp.Page
                 if (dioceseList != value)
                 {
                     dioceseList = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(DioceseList));
                 }
             }
         }
@@ -32,7 +86,60 @@ namespace MolaApp.Page
                 if (selectedDiocese != value)
                 {
                     selectedDiocese = value;
+
+                    if (selectedDiocese != null)
+                    {
+                        if (selectedDiocese.HasRegions)
+                        {
+                            // fill, enable and reset region picker
+                            RegionList = selectedDiocese.Regions.Values.ToList();
+                            IsRegionEnabled = true;
+                            selectedRegion = null;
+
+                            // reset and disable tribe picker
+                            selectedTribe = null;
+                            IsTribeEnabled = false;
+                        }
+                        else
+                        {
+                            // reset and disable region picker
+                            RegionList = new List<Region>();
+                            selectedRegion = null;
+                            IsRegionEnabled = false;
+
+                            // fill, enable and reset tribe picker
+                            TribeList = selectedDiocese.Tribes.Values.ToList();
+                            selectedTribe = null;
+                            IsTribeEnabled = true;
+                        }
+                    }
+                    else
+                    {
+                        // reset and disable region and tribe pickers
+                        selectedRegion = null;
+                        IsRegionEnabled = false;
+                        selectedTribe = null;
+                        IsTribeEnabled = false;
+                    }
+
                     OnPropertyChanged();
+                }
+            }
+        }
+
+        bool isRegionEnabled;
+        public bool IsRegionEnabled
+        {
+            get
+            {
+                return isRegionEnabled;
+            }
+            set
+            {
+                if (isRegionEnabled != value)
+                {
+                    isRegionEnabled = value;
+                    OnPropertyChanged(nameof(IsRegionEnabled));
                 }
             }
         }
@@ -46,7 +153,7 @@ namespace MolaApp.Page
                 if (regionList != value)
                 {
                     regionList = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(RegionList));
                 }
             }
         }
@@ -60,7 +167,36 @@ namespace MolaApp.Page
                 if (selectedRegion != value)
                 {
                     selectedRegion = value;
+
+                    if (selectedRegion != null)
+                    {
+                        // fill, enable and reset tribe picker
+                        TribeList = selectedRegion.Tribes.Values.ToList();
+                        selectedTribe = null;
+                        IsTribeEnabled = true;
+                    }
+                    else
+                    {
+                        // reset and disable tribe picker
+                        selectedTribe = null;
+                        IsTribeEnabled = false;
+                    }
+
                     OnPropertyChanged();
+                }
+            }
+        }
+
+        bool isTribeEnabled;
+        public bool IsTribeEnabled
+        {
+            get { return isTribeEnabled; }
+            set
+            {
+                if (isTribeEnabled != value)
+                {
+                    isTribeEnabled = value;
+                    OnPropertyChanged(nameof(IsTribeEnabled));
                 }
             }
         }
@@ -74,7 +210,7 @@ namespace MolaApp.Page
                 if (tribeList != value)
                 {
                     tribeList = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(TribeList));
                 }
             }
         }
@@ -102,7 +238,7 @@ namespace MolaApp.Page
                 if (functionList != value)
                 {
                     functionList = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(FunctionList));
                 }
             }
         }
@@ -116,7 +252,21 @@ namespace MolaApp.Page
                 if (selectedFunction != value)
                 {
                     selectedFunction = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(SelectedFunction));
+                }
+            }
+        }
+
+        ImageSource image;
+        public ImageSource Image
+        {
+            get { return image; }
+            set
+            {
+                if (image != value)
+                {
+                    image = value;
+                    OnPropertyChanged(nameof(Image));
                 }
             }
         }
@@ -130,7 +280,7 @@ namespace MolaApp.Page
                 if (name != value)
                 {
                     name = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(Name));
                 }
             }
         }
@@ -144,7 +294,7 @@ namespace MolaApp.Page
                 if (phone != value)
                 {
                     phone = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(Phone));
                 }
             }
         }
@@ -158,7 +308,7 @@ namespace MolaApp.Page
                 if (mail != value)
                 {
                     mail = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(Mail));
                 }
             }
         }
@@ -172,7 +322,7 @@ namespace MolaApp.Page
                 if (residence != value)
                 {
                     residence = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(Residence));
                 }
             }
         }
@@ -182,6 +332,7 @@ namespace MolaApp.Page
             get {
                 return new List<string>()
                 {
+                    NO_STAGE,
                     "Wölflinge",
                     "Jungpfadfinder",
                     "Pfadfinder",
@@ -199,7 +350,7 @@ namespace MolaApp.Page
                 if (favouriteStage != value)
                 {
                     favouriteStage = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(FavouriteStage));
                 }
             }
         }
@@ -229,31 +380,54 @@ namespace MolaApp.Page
                 if (woodbadgeCount != value)
                 {
                     woodbadgeCount = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(WoodbadgeCount));
                 }
             }
         }
 
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        string georgesPoints;
+        public string GeorgesPoints
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            get { return georgesPoints; }
+            set
+            {
+                if (georgesPoints != value)
+                {
+                    georgesPoints = value;
+                    OnPropertyChanged(nameof(GeorgesPoints));
+                }
+            }
         }
 
-        public void WriteToModel(ProfileModel model)
+        public List<string> RelationshipStatusList
         {
-            model.DioceseId = selectedDiocese.Id;
-            model.RegionId = selectedRegion.Id;
-            model.TribeId = selectedTribe.Id;
+            get
+            {
+                return new List<string>()
+                {
+                    NO_RELATIONSHIP_STATUS,
+                    "single",
+                    "in einer festen Beziehung",
+                    "in einer offenen Beziehung",
+                    "verlobt",
+                    "verheiratet",
+                    "kompliziert"
+                };
+            }
+        }
 
-            model.Name = name;
-            model.Residence = residence;
-            model.Phone = phone;
-            model.Mail = mail;
-            model.FunctionId = selectedFunction.Id;
-            model.WoodbadgeCount = woodbadgeCount;
+        string relationshipStatus;
+        public string RelationshipStatus
+        {
+            get { return relationshipStatus; }
+            set
+            {
+                if (relationshipStatus != value)
+                {
+                    relationshipStatus = value;
+                    OnPropertyChanged(nameof(RelationshipStatus));
+                }
+            }
         }
     }
 }

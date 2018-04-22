@@ -8,12 +8,7 @@
 
     <ScrollView>
         <StackLayout>
-            <Label Text="Was du nicht ausfüllst, wird in deinem Profil nicht angezeigt. Entscheide selbst!"
-                   VerticalOptions="End"
-                   HorizontalOptions="StartAndExpand" 
-                   Margin="5, 0"/>
-            
-            <Image x:Name="picture" Margin="50, 10" Source="avatar.png">
+            <Image x:Name="picture" Margin="50, 10" Source="{Binding Image}">
                 <Image.GestureRecognizers>
                     <TapGestureRecognizer
                     Tapped="PictureOptionsAsync"
@@ -21,57 +16,61 @@
                 </Image.GestureRecognizers>
             </Image>
 
-            <Label Text="Name"
+            <Label Text="Die mit einem * gekennzeichneten Felder sind Pflichtfelder. Beim Rest entscheidest du selbst, was du in deinem Profil preisgeben möchtest!"
                    VerticalOptions="End"
-                   HorizontalOptions="StartAndExpand" 
-                   Margin="5, 0"/>
+                   HorizontalOptions="StartAndExpand" />
+
+            <Label Text="Name *"
+                   VerticalOptions="End"
+                   HorizontalOptions="StartAndExpand"
+                   Margin="0, 5, 0, 0" />
             <Entry x:Name="nameEntry"
                    VerticalOptions="Start"
                    HorizontalOptions="FillAndExpand" 
                    Text="{Binding Name}" />
 
-            <Label Text="Diözese"
+            <Label Text="Diözese *"
                    VerticalOptions="End"
                    HorizontalOptions="StartAndExpand" 
-                   Margin="5, 0"/>
+                   Margin="0, 5, 0, 0" />
             <Picker x:Name="diocesePicker"
                     Title="Wähle deine Diözese aus"
                     VerticalOptions="Start"
                     HorizontalOptions="FillAndExpand"
                     ItemsSource="{Binding DioceseList}"
                     ItemDisplayBinding="{Binding Name}"
-                    SelectedItem="{Binding SelectedDiocese}"
-                    SelectedIndexChanged="SelectedDioceseChanged" />
+                    SelectedItem="{Binding SelectedDiocese}" />
 
-            <Label Text="Bezirk"
+            <Label Text="Bezirk *"
                    VerticalOptions="End"
                    HorizontalOptions="StartAndExpand" 
-                   Margin="5, 0"/>
+                   Margin="0, 5, 0, 0" />
             <Picker x:Name="regionPicker"
                     Title="Wähle deinen Bezirk aus"
                     VerticalOptions="Start"
                     HorizontalOptions="FillAndExpand"
+                    IsEnabled="{Binding IsRegionEnabled}"
                     ItemsSource="{Binding RegionList}"
                     ItemDisplayBinding="{Binding Name}"
-                    SelectedItem="{Binding SelectedRegion}"
-                    SelectedIndexChanged="SelectedRegionChanged" />
+                    SelectedItem="{Binding SelectedRegion}" />
 
-            <Label Text="Stamm"
+            <Label Text="Stamm *"
                    VerticalOptions="End"
                    HorizontalOptions="StartAndExpand" 
-                   Margin="5, 0"/>
+                   Margin="0, 5, 0, 0" />
             <Picker x:Name="tribePicker"
                     Title="Wähle deinen Stamm aus"
                     VerticalOptions="Start"
                     HorizontalOptions="FillAndExpand"
+                    IsEnabled="{Binding IsTribeEnabled}"
                     ItemsSource="{Binding TribeList}"
                     ItemDisplayBinding="{Binding Name}"
                     SelectedItem="{Binding SelectedTribe}" />
 
-            <Label Text="Amt / Funktion"
+            <Label Text="Amt / Funktion *"
                    VerticalOptions="End"
                    HorizontalOptions="StartAndExpand" 
-                   Margin="5, 0"/>
+                   Margin="0, 5, 0, 0" />
             <Picker x:Name="functionPicker"
                     Title="Wähle deine Funktion aus"
                     VerticalOptions="Start"
@@ -80,10 +79,10 @@
                     ItemDisplayBinding="{Binding Name}"
                     SelectedItem="{Binding SelectedFunction}" />
 
-            <Label Text="Anzahl Klötzchen (Woodbadge)"
+            <Label Text="Anzahl Klötzchen (Woodbadge) *"
                    VerticalOptions="End"
                    HorizontalOptions="StartAndExpand" 
-                   Margin="5, 0"/>
+                   Margin="0, 5, 0, 0" />
             <Picker x:Name="woodbadgePicker"
                     Title="Wie viele Klötzchen hast du?"
                     VerticalOptions="Start"
@@ -91,10 +90,21 @@
                     ItemsSource="{Binding WoodbadgeList}"
                     SelectedItem="{Binding WoodbadgeCount}" />
 
+            <Label Text="Lieblingsstufe"
+                   VerticalOptions="End"
+                   HorizontalOptions="StartAndExpand" 
+                   Margin="0, 5, 0, 0" />
+            <Picker x:Name="stagePicker"
+                    Title="Welche Stufe magst du am liebsten?"
+                    VerticalOptions="Start"
+                    HorizontalOptions="FillAndExpand"
+                    ItemsSource="{Binding StagesList}"
+                    SelectedItem="{Binding FavouriteStage}" />
+
             <Label Text="Handynummer"
                    VerticalOptions="End"
                    HorizontalOptions="StartAndExpand" 
-                   Margin="5, 0"/>
+                   Margin="0, 5, 0, 0" />
             <Entry x:Name="phoneEntry"
                    VerticalOptions="Start"
                    HorizontalOptions="FillAndExpand"
@@ -104,7 +114,7 @@
             <Label Text="E-Mail"
                    VerticalOptions="End"
                    HorizontalOptions="StartAndExpand" 
-                   Margin="5, 0"/>
+                   Margin="0, 5, 0, 0" />
             <Entry x:Name="mailEntry"
                    VerticalOptions="Start"
                    HorizontalOptions="FillAndExpand" 
@@ -114,16 +124,27 @@
             <Label Text="Wohnort"
                    VerticalOptions="End"
                    HorizontalOptions="StartAndExpand" 
-                   Margin="5, 0"/>
+                   Margin="0, 5, 0, 0" />
             <Entry x:Name="residenceEntry"
                    VerticalOptions="Start"
                    HorizontalOptions="FillAndExpand" 
                    Text="{Binding Residence}" />
 
-            <Label Text="'Originale' Georgspunkte"
+            <Label Text="Beziehungsstatus"
                    VerticalOptions="End"
                    HorizontalOptions="StartAndExpand" 
-                   Margin="5, 0"/>
+                   Margin="0, 5, 0, 0" />
+            <Picker x:Name="relationshipStatusPicker"
+                    Title="Gib deinen Beziehungsstatus an"
+                    VerticalOptions="Start"
+                    HorizontalOptions="FillAndExpand"
+                    ItemsSource="{Binding RelationshipStatusList}"
+                    SelectedItem="{Binding RelationshipStatus}" />
+
+            <Label Text="Verdiente 'echte' Georgspunkte"
+                   VerticalOptions="End"
+                   HorizontalOptions="StartAndExpand" 
+                   Margin="0, 5, 0, 0" />
             <Entry x:Name="georgesPointsEntry"
                    VerticalOptions="Start"
                    HorizontalOptions="FillAndExpand" 

@@ -1,11 +1,13 @@
-﻿using MolaApp.Model;
-using MolaApp.Repository;
+﻿using MolaApp.Api;
+using MolaApp.Model;
+using PCLStorage;
 using Plugin.Media;
 using Plugin.Media.Abstractions;
 using Plugin.Permissions;
 using Plugin.Permissions.Abstractions;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,94 +22,124 @@ namespace MolaApp.Page
 	{
         ProfileModel model;
 
-        ProfileRepository profileRepo;
-
         StructureController structureController;
-
-        Dictionary<string, string> dioceseNameToId = new Dictionary<string, string>();
-
-        public IList<Diocese> Dioceses;
+        IProfileApi profileApi;
+        ImageApi imageApi;
 
         ProfileEditViewModel viewModel;
 
-        public ProfileEditPage(ServiceContainer container, ProfileModel profile) : base(container)
-        {
-            profileRepo = Container.Get<ProfileRepository>("repository/profile");
+        MediaFile newImage;
 
+        private bool initialized = false;
+
+        public ProfileEditPage(ServiceContainer container) : base(container)
+        {
             structureController = Container.Get<StructureController>("structure");
+            profileApi = Container.Get<IProfileApi>("api/profile");
+            imageApi = Container.Get<ImageApi>("api/image");
 
             InitializeComponent();
 
-            model = profile;
-
             viewModel = new ProfileEditViewModel();
+
             BindingContext = viewModel;
-            
-            viewModel.DioceseList = structureController.Structure.Dioceses.Values.ToList();
-            viewModel.FunctionList = structureController.Structure.Functions;
         }
 
-        void SelectedDioceseChanged(object sender, EventArgs e)
+        public async Task SetModel(ProfileModel profile)
         {
-            if(viewModel.SelectedDiocese != null)
-            {
-                Diocese diocese = viewModel.SelectedDiocese;
+            model = profile;
 
+            viewModel.DioceseList = structureController.Structure?.Dioceses?.Values.ToList();
+            viewModel.FunctionList = structureController.Structure?.Functions?.Values.ToList();
+
+            if(profile == null)
+            {
+                return;
+            }
+
+            viewModel.Name = profile.Name;
+            viewModel.Residence = profile.Residence;
+            viewModel.Phone = profile.Phone;
+            viewModel.Mail = profile.Mail;
+            viewModel.WoodbadgeCount = profile.WoodbadgeCount;
+            viewModel.FavouriteStage = profile.FavouriteStage;
+            viewModel.RelationshipStatus = profile.RelationshipStatus;
+
+            if (profile.GeorgesPoints < 0)
+            {
+                viewModel.GeorgesPoints = "";
+            }
+            else
+            {
+                viewModel.GeorgesPoints = profile.GeorgesPoints.ToString();
+            }
+                
+
+            if (!String.IsNullOrEmpty(profile.DioceseId))
+            {
+                Diocese diocese = structureController.Structure.Dioceses[profile.DioceseId];
+                viewModel.SelectedDiocese = diocese;
                 if (diocese.HasRegions)
                 {
-                    // Reset region and enable and fill picker
-                    viewModel.RegionList = diocese.Regions.Values.ToList();
-                    viewModel.SelectedRegion = null;
-                    regionPicker.IsEnabled = true;
-
-                    // reset tribe and disable picker
-                    viewModel.SelectedTribe = null;
-                    tribePicker.IsEnabled = false;
+                    if (!String.IsNullOrEmpty(profile.RegionId))
+                    {
+                        Region region = diocese?.Regions[profile.RegionId];
+                        viewModel.SelectedRegion = region;
+                        if (!String.IsNullOrEmpty(profile.TribeId))
+                        {
+                            Tribe tribe = region?.Tribes[profile.TribeId];
+                            viewModel.SelectedTribe = tribe;
+                        }
+                    }
                 }
                 else
                 {
-                    // Reset region and disable picker
-                    viewModel.RegionList = new List<Region>();
                     viewModel.SelectedRegion = null;
-                    regionPicker.IsEnabled = false;
-
-                    // reset tribe and enable and fill picker
-                    viewModel.TribeList = diocese.Tribes.Values.ToList();
-                    viewModel.SelectedTribe = null;
-                    tribePicker.IsEnabled = true;
+                    if (!String.IsNullOrEmpty(profile.TribeId))
+                    {
+                        Tribe tribe = diocese?.Tribes[profile.TribeId];
+                        viewModel.SelectedTribe = tribe;
+                    }
                 }
             }
-            else
+
+            if (!String.IsNullOrEmpty(profile.FunctionId))
             {
-                viewModel.SelectedRegion = null;
-                regionPicker.IsEnabled = false;
-                viewModel.SelectedTribe = null;
-                tribePicker.IsEnabled = false;
+                viewModel.SelectedFunction = structureController.Structure.Functions[profile.FunctionId];
             }
-        }
 
-        void SelectedRegionChanged(object sender, EventArgs e)
-        {
-            if (viewModel.SelectedRegion != null)
+            if (String.IsNullOrEmpty(profile.ImageId))
             {
-                Region region = viewModel.SelectedRegion;
-
-                // reset tribe and enable and fill picker
-                viewModel.TribeList = region.Tribes.Values.ToList();
-                viewModel.SelectedTribe = null;
-                tribePicker.IsEnabled = true;
+                viewModel.Image = ImageSource.FromFile("avatar.jpg");
             }
             else
             {
-                viewModel.SelectedTribe = null;
-                tribePicker.IsEnabled = false;
+                ImageModel image = await imageApi.GetAsync(profile.ImageId);
+                viewModel.Image = ImageSource.FromStream(() => new MemoryStream(image.Bytes));
             }
+
+            initialized = true;
         }
 
         async void SaveAsync(object sender, EventArgs e)
         {
+            if (newImage != null)
+            {
+                byte[] buffer;
+                Stream stream = newImage.GetStream();
+                using (BinaryReader br = new BinaryReader(stream))
+                {
+                    buffer = br.ReadBytes((int)stream.Length);
+                }
+                ImageModel image = new ImageModel(Guid.NewGuid().ToString());
+                image.Bytes = buffer;
+
+                await imageApi.PutAsync(image);
+                model.ImageId = image.Id;
+            }
+
             viewModel.WriteToModel(model);
-            profileRepo.PutAsync(model);
+            await profileApi.UpdateAsync(model);
             await Navigation.PopAsync();
         }
 
@@ -141,7 +173,7 @@ namespace MolaApp.Page
         {
             await CrossMedia.Current.Initialize();
 
-            if (!CrossMedia.Current.IsTakePhotoSupported)
+            if (!CrossMedia.Current.IsCameraAvailable || !CrossMedia.Current.IsTakePhotoSupported)
             {
                 await DisplayAlert("Fehler", "Dein Gerät unterstützt diese Funktion nicht", "OK");
                 return;
@@ -165,7 +197,7 @@ namespace MolaApp.Page
                 return;
             }
 
-            var file = await CrossMedia.Current.TakePhotoAsync(new StoreCameraMediaOptions() {
+            MediaFile image = await CrossMedia.Current.TakePhotoAsync(new StoreCameraMediaOptions() {
                 AllowCropping = true,
                 DefaultCamera = CameraDevice.Rear,
                 MaxWidthHeight = 300,
@@ -174,16 +206,13 @@ namespace MolaApp.Page
                 Name = model.Id + ".jpg"
             });
 
-            if (file == null)
+            if (image == null)
             {
                 return;
             }
 
-            picture.Source = ImageSource.FromStream(() =>
-            {
-                var stream = file.GetStream();
-                return stream;
-            });
+            newImage = image;
+            viewModel.Image = ImageSource.FromStream(() => image.GetStream());
         }
 
         async void PickPhotoAsync()
@@ -211,18 +240,15 @@ namespace MolaApp.Page
                 return;
             }
 
-            var file = await CrossMedia.Current.PickPhotoAsync();
+            MediaFile image = await CrossMedia.Current.PickPhotoAsync();
 
-            if (file == null)
+            if (image == null)
             {
                 return;
             }
 
-            picture.Source = ImageSource.FromStream(() =>
-            {
-                var stream = file.GetStream();
-                return stream;
-            });
+            newImage = image;
+            viewModel.Image = ImageSource.FromStream(() => image.GetStream());
         }
 
         async void RemovePhotoAsync()

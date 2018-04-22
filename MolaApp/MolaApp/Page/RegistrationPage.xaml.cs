@@ -10,20 +10,47 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using ZXing.Net.Mobile.Forms;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace MolaApp.Page
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class RegistrationPage : MolaPage
     {
-        public string ScannedId;
+        string scannedId;
+        public string ScannedId
+        {
+            get { return scannedId; }
+            set
+            {
+                if (scannedId != value)
+                {
+                    scannedId = value;
+                    OnPropertyChanged(nameof(ScannedId));
+                }
+            }
+        }
+
         IUserApi userApi;
+        IProfileApi profileApi;
+        AuthController authController;
 
         public RegistrationPage (ServiceContainer container) : base(container)
 		{
 			InitializeComponent ();
+            BindingContext = this;
+
             userApi = Container.Get<IUserApi>("api/user");
-		}
+            profileApi = Container.Get<IProfileApi>("api/profile");
+            authController = Container.Get<AuthController>("auth");
+        }
+
+        async void ShowPrivacyPolicy(object sender, EventArgs e)
+        {
+            PrivacyPolicyPage ppPage = new PrivacyPolicyPage(Container);
+            await Navigation.PushAsync(ppPage);
+        }
 
         async void ScanAsync(object sender, EventArgs e)
         {
@@ -51,65 +78,39 @@ namespace MolaApp.Page
 
             // Navigate to our scanner page
             await Navigation.PushModalAsync(scanPage);
-
-            await Task.Run(() => waitHandle.WaitOne());
-
-            
         }
 
-        async void RegisterAsync(object sender, EventArgs e)
+        async Task RegisterAsync(object sender, EventArgs e)
         {
+            if(passwordEntry.Text != passwordConfirmEntry.Text)
+            {
+                await DisplayAlert("Fehler", "Die eingegebenen Passwörter stimmen nicht überein!", "Ok");
+                return;
+            }
+
             UserModel model = new UserModel(ScannedId);
-            model.Email = emailEntry.Text;
             model.Password = passwordEntry.Text;
 
             try
             {
                 await userApi.CreateAsync(model);
+                //await authController.LoginAsync(model);
+                //await profileApi.UpdateAsync(new ProfileModel(model.Id));
                 await Navigation.PopAsync();
             }
             catch (ConflictException ex)
             {
-                if(ex.Field == UserApi.ConflictFieldId)
-                {
-                    codeErrorLabel.Text = "Der von dir gescannte Code ist bereits für einen anderen Benutzer reserviert!";
-                }
-                else if(ex.Field == UserApi.ConflictFieldEmail)
-                {
-                    emailErrorLabel.Text = "Es existiert bereits ein Account mit dieser Email-Adresse";
-                }
+                await DisplayAlert("Dieb! ;-)", "Der von dir gescannte Code ist bereits für einen anderen Benutzer reserviert!", "Ok");
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Fehler", "Möglicherweise hast du gerade keine ausreichende Internetverbindung. Bitte versuche es an einem anderen Ort erneut!", "Ok");
             }
         }
 
         async void CancelAsync(object sender, EventArgs e)
         {
             await Navigation.PopAsync();
-        }
-    }
-
-    public class StringEmptyToBooleanConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            bool invert = false;
-            if (parameter is bool)
-            {
-                invert = (bool)parameter;
-            }
-
-            if(string.IsNullOrEmpty(value as string))
-            {
-                return !invert;
-            }
-            else
-            {
-                return invert;
-            }
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            throw new NotImplementedException("This conversion is not possible");
         }
     }
 }

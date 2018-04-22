@@ -1,4 +1,5 @@
-﻿using MolaApp.Model;
+﻿using Akavache;
+using MolaApp.Model;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -8,18 +9,35 @@ using System.Threading.Tasks;
 
 namespace MolaApp.Api
 {
-    class ProfileApi : AbstractApi<ProfileModel>, IProfileApi
+    public class ProfileApi : AbstractApi<ProfileModel>, IProfileApi
     {
-        string baseUrl = "http://encala.de/";
-
-        public Task<bool> UpdateAsync(ProfileModel profile)
+        public ProfileApi(HttpClient httpClient) : base(httpClient)
         {
-            throw new NotImplementedException();
+
         }
 
-        protected override string GetBaseUrl()
+        protected override string ObjectName()
         {
-            return baseUrl;
+            return "profile";
+        }
+
+        public async Task<bool> UpdateAsync(ProfileModel profile)
+        {
+            string path = ObjectName();
+            HttpContent content = CreateJsonContent(profile);
+
+            HttpResponseMessage response = await client.PutAsync(path, content);
+            if (response.IsSuccessStatusCode)
+            {
+                string key = ObjectName() + "_" + profile.Id;
+                var cache = BlobCache.LocalMachine;
+                cache.InsertObject<ProfileModel>(key, profile, TimeSpan.FromMinutes(10));
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

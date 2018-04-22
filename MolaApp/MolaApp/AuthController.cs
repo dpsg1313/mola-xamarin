@@ -3,8 +3,6 @@ using MolaApp.Model;
 using Newtonsoft.Json;
 using PCLStorage;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace MolaApp
@@ -13,6 +11,7 @@ namespace MolaApp
     {
         private const string TOKEN_FOLDER = "token";
         private const string CURRENT_TOKEN_FILE = "current.json";
+        private const string TOKEN_PROPERTY = "AuthToken";
 
         public bool IsLoggedIn { get; private set; }
 
@@ -22,10 +21,17 @@ namespace MolaApp
 
         IFolder loginFolder;
 
+        public event EventHandler TokenChanged;
+
         public AuthController(IUserApi userApi)
         {
             IsLoggedIn = false;
             api = userApi;
+        }
+
+        private void NotifyTokenChanged()
+        {
+            TokenChanged?.Invoke(this, null);
         }
 
         async public Task InitAsync()
@@ -34,11 +40,6 @@ namespace MolaApp
             loginFolder = await rootFolder.CreateFolderAsync(TOKEN_FOLDER, CreationCollisionOption.OpenIfExists);
 
             await loadTokenAsync();
-
-            if(AuthToken != null)
-            {
-                IsLoggedIn = true;
-            }
         }
 
         async public Task<bool> LoginAsync(UserModel credentials)
@@ -50,6 +51,8 @@ namespace MolaApp
                 await SaveTokenAsync(authToken);
 
                 IsLoggedIn = true;
+
+                NotifyTokenChanged();
 
                 return true;
             }
@@ -63,6 +66,8 @@ namespace MolaApp
                 await DeleteTokenAsync();
                 AuthToken = null;
                 IsLoggedIn = false;
+
+                NotifyTokenChanged();
 
                 return true;
             }
@@ -78,6 +83,11 @@ namespace MolaApp
                 IFile file = await loginFolder.GetFileAsync(CURRENT_TOKEN_FILE);
                 string json = await file.ReadAllTextAsync();
                 AuthToken = JsonConvert.DeserializeObject<AuthToken>(json);
+                if(AuthToken != null)
+                {
+                    IsLoggedIn = true;
+                }
+                NotifyTokenChanged();
             }
         }
 
