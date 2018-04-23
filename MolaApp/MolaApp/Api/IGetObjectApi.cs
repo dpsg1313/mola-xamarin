@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MolaApp.Api
 {
-    public interface IApi<T> where T : IModel
+    public interface IGetObjectApi<T> where T : IModel
     {
         Task<T> GetAsync(string id);
 

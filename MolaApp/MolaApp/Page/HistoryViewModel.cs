@@ -27,6 +27,8 @@ namespace MolaApp.Page
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        public string ImageId { get; set; }
+
         ImageSource image;
         public ImageSource Image
         {
@@ -55,8 +57,8 @@ namespace MolaApp.Page
             }
         }
 
-        DateTimeOffset date;
-        public DateTimeOffset Date
+        string date;
+        public string Date
         {
             get { return date; }
             set

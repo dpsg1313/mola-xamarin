@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MolaApp.Api
 {
-    public interface IAdventureApi : IApi<AdventureModel>
+    public interface IAdventureApi
     {
 
     }

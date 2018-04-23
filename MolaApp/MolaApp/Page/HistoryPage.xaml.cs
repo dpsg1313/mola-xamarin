@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -14,6 +15,8 @@ namespace MolaApp.Page
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class HistoryPage : MolaPage
 	{
+        const string DATETIME_FORMAT = "dddd, d.M.yyyy H:mm";
+
         HistoryController historyController;
         ProfileApi profileApi;
         ImageApi imageApi;
@@ -21,6 +24,8 @@ namespace MolaApp.Page
         public ObservableCollection<HistoryViewModel> History { get; }
 
         Dictionary<string, HistoryViewModel> _history;
+
+        CancellationTokenSource cts = new CancellationTokenSource();
 
         public HistoryPage(ServiceContainer container) : base(container)
 		{
@@ -40,7 +45,7 @@ namespace MolaApp.Page
         {
             base.OnAppearing();
 
-            foreach(HistoryModel model in historyController.History)
+            foreach(HistoryModel model in historyController.History.OrderBy(m => m.Date, new DateTimeOffsetInvertedComparer()))
             {
                 string profileId = model.ProfileId;
 
@@ -50,22 +55,38 @@ namespace MolaApp.Page
                 {
                     viewModel = new HistoryViewModel(profileId);
                     viewModel.Label = profileId;
-                    viewModel.Date = model.Date;
+                    viewModel.Date = model.Date.ToString(DATETIME_FORMAT);
                     _history.Add(profileId, viewModel);
-                    History.Add(viewModel);
                 }
+                else
+                {
+                    // Remove and re-add viewModel to get correct ordering
+                    History.Remove(viewModel);
+                }
+
+                History.Add(viewModel);
 
                 profileApi.Get(profileId).Subscribe(profileModel =>
                 {
                     viewModel.Label = profileModel.Name;
-
-                    void setImage(ImageModel image)
+                    
+                    if(viewModel.ImageId != profileModel.ImageId)
                     {
-                        viewModel.Image = ImageSource.FromStream(() => new MemoryStream(image.Bytes));
-                    };
-                    imageApi.Get(profileModel.ImageId).Subscribe(setImage);
-                });
+                        viewModel.ImageId = profileModel.ImageId;
+                        void setImage(ImageModel image)
+                        {
+                            viewModel.Image = ImageSource.FromStream(() => new MemoryStream(image.Bytes));
+                        };
+                        imageApi.Get(profileModel.ImageId).Subscribe(setImage, cts.Token);
+                    }
+                }, cts.Token);
             }
+        }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            cts.Cancel();
         }
 
         async void OnItemTapped(object sender, ItemTappedEventArgs e)
@@ -74,6 +95,14 @@ namespace MolaApp.Page
             ProfilePage profilePage = new ProfilePage(Container, profileId);
             ((ListView)sender).SelectedItem = null;
             await Navigation.PushAsync(profilePage);
+        }
+
+        class DateTimeOffsetInvertedComparer : IComparer<DateTimeOffset>
+        {
+            public int Compare(DateTimeOffset x, DateTimeOffset y)
+            {
+                return DateTimeOffset.Compare(y, x);
+            }
         }
     }
 }

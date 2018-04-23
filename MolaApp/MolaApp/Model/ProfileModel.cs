@@ -10,8 +10,11 @@ namespace MolaApp.Model
         [JsonProperty("id")]
         public string Id { get; }
 
-        [JsonProperty("name")]
-        public string Name { get; set; }
+        [JsonProperty("firstname")]
+        public string Firstname { get; set; }
+
+        [JsonProperty("lastname")]
+        public string Lastname { get; set; }
 
         [JsonProperty("tribeId")]
         public string TribeId { get; set; }
@@ -51,6 +54,15 @@ namespace MolaApp.Model
 
         [JsonProperty("imageId")]
         public string ImageId { get; set; }
+
+        [JsonIgnore]
+        public string Name
+        {
+            get
+            {
+                return Firstname + " " + Lastname;
+            }
+        }
 
         public ProfileModel(string id)
         {

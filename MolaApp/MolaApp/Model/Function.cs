@@ -7,7 +7,7 @@ namespace MolaApp.Model
 {
     public class Function
     {
-        public enum Levels { Bund, Diocese, Region, Tribe };
+        public enum Levels { Bund, Diocese, Region, Tribe, None };
 
         [JsonProperty("id")]
         public string Id { get; protected set; }

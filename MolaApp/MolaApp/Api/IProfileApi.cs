@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MolaApp.Api
 {
-    public interface IProfileApi : IApi<ProfileModel>
+    public interface IProfileApi : IGetObjectApi<ProfileModel>
     {
         Task<bool> UpdateAsync(ProfileModel profile);
     }

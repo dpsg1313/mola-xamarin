@@ -20,14 +20,23 @@
                    VerticalOptions="End"
                    HorizontalOptions="StartAndExpand" />
 
-            <Label Text="Name *"
+            <Label Text="Vorname *"
                    VerticalOptions="End"
                    HorizontalOptions="StartAndExpand"
                    Margin="0, 5, 0, 0" />
-            <Entry x:Name="nameEntry"
+            <Entry x:Name="firstnameEntry"
                    VerticalOptions="Start"
                    HorizontalOptions="FillAndExpand" 
-                   Text="{Binding Name}" />
+                   Text="{Binding Firstname}" />
+            
+            <Label Text="Nachname *"
+                   VerticalOptions="End"
+                   HorizontalOptions="StartAndExpand"
+                   Margin="0, 5, 0, 0" />
+            <Entry x:Name="lastnameEntry"
+                   VerticalOptions="Start"
+                   HorizontalOptions="FillAndExpand" 
+                   Text="{Binding Lastname}" />
 
             <Label Text="Diözese *"
                    VerticalOptions="End"

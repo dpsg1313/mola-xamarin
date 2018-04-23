@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace MolaApp.Api
 {
-    public class UserApi : AbstractApi<UserModel>, IUserApi
+    public class UserApi : AbstractGetObjectApi<UserModel>, IUserApi
     {
         public static string ConflictFieldEmail = "email";
         public static string ConflictFieldId = "id";

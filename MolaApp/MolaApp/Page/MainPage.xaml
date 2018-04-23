@@ -17,6 +17,8 @@
 
         <Button x:Name="editProfileButton" Text="Mein Profil bearbeiten" Clicked="EditProfileAsync" />
 
+        <Button x:Name="myProfileButton" Text="Mein Profil anzeigen" Clicked="MyProfileAsync" />
+
         <Button x:Name="bookmarksButton" Text="Merkliste" Clicked="BookmarksAsync" />
         
         <Button x:Name="historyButton" Text="Historie" Clicked="HistoryAsync" />

@@ -56,7 +56,8 @@ namespace MolaApp.Page
                 model.GeorgesPoints = int.Parse(georgesPoints);
             }
 
-            model.Name = name;
+            model.Firstname = firstname;
+            model.Lastname = lastname;
             model.Residence = residence;
             model.Phone = phone;
             model.Mail = mail;
@@ -271,16 +272,30 @@ namespace MolaApp.Page
             }
         }
 
-        string name;
-        public string Name
+        string firstname;
+        public string Firstname
         {
-            get { return name; }
+            get { return firstname; }
             set
             {
-                if (name != value)
+                if (firstname != value)
                 {
-                    name = value;
-                    OnPropertyChanged(nameof(Name));
+                    firstname = value;
+                    OnPropertyChanged(nameof(Firstname));
+                }
+            }
+        }
+
+        string lastname;
+        public string Lastname
+        {
+            get { return lastname; }
+            set
+            {
+                if (lastname != value)
+                {
+                    lastname = value;
+                    OnPropertyChanged(nameof(Lastname));
                 }
             }
         }

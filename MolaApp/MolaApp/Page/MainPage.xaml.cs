@@ -2,6 +2,7 @@
 using MolaApp.Model;
 using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Xamarin.Forms;
@@ -11,12 +12,12 @@ namespace MolaApp.Page
 {
 	public partial class MainPage : MolaPage
 	{
+        Regex uuidValidator = new Regex(@"^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89aAbB][a-f0-9]{3}-[a-f0-9]{12}$", RegexOptions.IgnoreCase);
+
         IProfileApi profileApi;
 
         AuthController authController;
         HistoryController historyController;
-
-        string scannedId;
 
 		public MainPage(ServiceContainer container) : base(container)
 		{
@@ -31,11 +32,6 @@ namespace MolaApp.Page
             base.OnAppearing();
 
         }
-
-        //protected override bool OnBackButtonPressed()
-        //{
-        //    return true;
-        //}
 
         async void BookmarksAsync(object sender, EventArgs e)
         {
@@ -54,6 +50,17 @@ namespace MolaApp.Page
             ProfileModel profile = await profileApi.GetAsync(authController.AuthToken.UserId);
             ProfileEditPage profilePage = new ProfileEditPage(Container);
             await profilePage.SetModel(profile);
+            await Navigation.PushAsync(profilePage);
+        }
+
+        async void MyProfileAsync(object sender, EventArgs e)
+        {
+            await ShowProfile(authController.AuthToken.UserId);
+        }
+
+        async Task ShowProfile(string profileId)
+        {
+            ProfilePage profilePage = new ProfilePage(Container, profileId);
             await Navigation.PushAsync(profilePage);
         }
 
@@ -78,6 +85,7 @@ namespace MolaApp.Page
 
             var waitHandle = new EventWaitHandle(false, EventResetMode.AutoReset);
 
+            string scannedId = null;
             scanPage.OnScanResult += (result) => {
                 // Stop scanning
                 scanPage.IsScanning = false;
@@ -95,11 +103,22 @@ namespace MolaApp.Page
             await Navigation.PushModalAsync(scanPage);
             await Task.Run(() => waitHandle.WaitOne());
 
-            Console.WriteLine(scannedId);
-            await historyController.SetScannedNow(scannedId);
+            if(scannedId == null)
+            {
+                return;
+            }
 
-            ProfilePage profilePage = new ProfilePage(Container, scannedId);
-            await Navigation.PushAsync(profilePage);
+            if(!uuidValidator.IsMatch(scannedId))
+            {
+                DependencyService.Get<IToastMessage>().ShortAlert("Ungültiger Code!");
+            }
+
+            if(scannedId != authController.AuthToken.UserId)
+            {
+                await historyController.SetScannedNow(scannedId);
+            }
+
+            await ShowProfile(scannedId);
         }
     }
 }

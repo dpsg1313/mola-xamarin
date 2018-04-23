@@ -5,16 +5,10 @@
                 x:Class="MolaApp.Page.HistoryPage"
                 Title="Historie">
 
-    <ContentPage.Resources>
-        <ResourceDictionary>
-            <mp:ListViewHistoryComparer x:Key="historyComparer" />
-        </ResourceDictionary>
-    </ContentPage.Resources>
-
     <ListView x:Name="historyList" ItemsSource="{Binding History}" ItemTapped="OnItemTapped">
         <ListView.ItemTemplate>
             <DataTemplate>
-                <ImageCell Text="{Binding Label}" Detail="{Binding Date}" ImageSource="{Binding Image}" />
+                <ImageCell Text="{Binding Label}" TextColor="SteelBlue" Detail="{Binding Date}" ImageSource="{Binding Image}" />
             </DataTemplate>
         </ListView.ItemTemplate>
     </ListView>

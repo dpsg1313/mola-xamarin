@@ -2,6 +2,7 @@
 using PCLStorage;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -13,8 +14,12 @@ namespace MolaApp.Page
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
+        public ObservableCollection<AdventureViewModel> Adventures { get; }
+
         public ProfileViewModel()
         {
+            Adventures = new ObservableCollection<AdventureViewModel>();
+            showAdventureButton = true;
             Image = ImageSource.FromResource("avatar.jpg");
         }
 
@@ -23,16 +28,44 @@ namespace MolaApp.Page
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        bool bookmarked;
-        public bool Bookmarked
+        bool isDataLoaded;
+        public bool IsDataLoaded
         {
-            get { return bookmarked; }
+            get { return isDataLoaded; }
             set
             {
-                if (bookmarked != value)
+                if (isDataLoaded != value)
                 {
-                    bookmarked = value;
-                    OnPropertyChanged(nameof(Bookmarked));
+                    isDataLoaded = value;
+                    OnPropertyChanged(nameof(IsDataLoaded));
+                }
+            }
+        }
+
+        bool isMyProfile;
+        public bool IsMyProfile
+        {
+            get { return isMyProfile; }
+            set
+            {
+                if (isMyProfile != value)
+                {
+                    isMyProfile = value;
+                    OnPropertyChanged(nameof(IsMyProfile));
+                }
+            }
+        }
+
+        bool isBookmarked;
+        public bool IsBookmarked
+        {
+            get { return isBookmarked; }
+            set
+            {
+                if (isBookmarked != value)
+                {
+                    isBookmarked = value;
+                    OnPropertyChanged(nameof(IsBookmarked));
                 }
             }
         }
@@ -215,6 +248,23 @@ namespace MolaApp.Page
                 {
                     relationshipStatus = value;
                     OnPropertyChanged(nameof(RelationshipStatus));
+                }
+            }
+        }
+
+        bool showAdventureButton;
+        public bool ShowAdventureButton
+        {
+            get
+            {
+                return showAdventureButton && !isMyProfile;
+            }
+            set
+            {
+                if (showAdventureButton != value)
+                {
+                    showAdventureButton = value;
+                    OnPropertyChanged(nameof(ShowAdventureButton));
                 }
             }
         }

@@ -57,7 +57,8 @@ namespace MolaApp.Page
                 return;
             }
 
-            viewModel.Name = profile.Name;
+            viewModel.Firstname = profile.Firstname;
+            viewModel.Lastname = profile.Lastname;
             viewModel.Residence = profile.Residence;
             viewModel.Phone = profile.Phone;
             viewModel.Mail = profile.Mail;
@@ -123,6 +124,12 @@ namespace MolaApp.Page
 
         async void SaveAsync(object sender, EventArgs e)
         {
+            if(string.IsNullOrEmpty(viewModel.Firstname) || string.IsNullOrEmpty(viewModel.Lastname) || viewModel.SelectedTribe == null || viewModel.SelectedFunction == null || viewModel.WoodbadgeCount < 0)
+            {
+                DependencyService.Get<IToastMessage>().LongAlert("Du musst alle mit * gekennzeichneten Felder ausfüllen!");
+                return;
+            }
+
             if (newImage != null)
             {
                 byte[] buffer;

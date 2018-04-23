@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace MolaApp.Api
 {
-    public class ProfileApi : AbstractApi<ProfileModel>, IProfileApi
+    public class ProfileApi : AbstractGetObjectApi<ProfileModel>, IProfileApi
     {
         public ProfileApi(HttpClient httpClient) : base(httpClient)
         {

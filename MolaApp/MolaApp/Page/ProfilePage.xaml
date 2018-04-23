@@ -9,185 +9,207 @@
         <ResourceDictionary>
             <mp:NullToFalseConverter x:Key="nullToFalse" />
             <mp:EmptyStringToFalseConverter x:Key="emptyToFalse" />
+            <mp:InverseBooleanConverter x:Key="inverseBoolean" />
         </ResourceDictionary>
     </ContentPage.Resources>
     
-    
     <ScrollView>
         <StackLayout>
-            <StackLayout Orientation="Horizontal">
-                <Label Text="Merken"
-                   VerticalOptions="Center"
-                   HorizontalOptions="End" />
-                <Switch x:Name="bookmarkSwitch" Toggled="BookmarkToggled" IsToggled="{Binding Bookmarked}" />
-            </StackLayout>
+            <ActivityIndicator IsRunning="True" 
+                               IsVisible="{Binding IsDataLoaded, Converter={StaticResource inverseBoolean}}" 
+                               Color="SteelBlue" 
+                               VerticalOptions="Center" 
+                               HorizontalOptions="Center" />
+            <Label Text="Keine Daten vorhanden"
+                   IsVisible="{Binding IsDataLoaded, Converter={StaticResource inverseBoolean}}"
+                    VerticalOptions="Center"
+                    HorizontalOptions="Center"
+                    Margin="0, 5, 0, 0" />
+
+            <StackLayout IsVisible="{Binding IsDataLoaded}">
+                <StackLayout Orientation="Horizontal" IsVisible="{Binding IsMyProfile, Converter={StaticResource inverseBoolean}}">
+                    <Label Text="Merken"
+                       VerticalOptions="Center"
+                       HorizontalOptions="End" />
+                    <Switch x:Name="bookmarkSwitch" Toggled="BookmarkToggled" IsToggled="{Binding IsBookmarked}" />
+                </StackLayout>
             
-            <Image x:Name="picture" Margin="50, 10" Source="{Binding Image}"/>
+                <Image x:Name="picture" Margin="50, 10" Source="{Binding Image}"/>
 
-            <Label Text="Name"
-                   VerticalOptions="End"
-                   HorizontalOptions="StartAndExpand"
-                   Margin="0, 5, 0, 0" />
-            <Label x:name="name" Text="{Binding Path=Name}"
-                   FontSize="Large"
-                   VerticalOptions="Start" 
-                   HorizontalOptions="StartAndExpand" />
+                <Label Text="Name"
+                       VerticalOptions="End"
+                       HorizontalOptions="StartAndExpand"
+                       Margin="0, 5, 0, 0" />
+                <Label x:name="name" Text="{Binding Path=Name}"
+                       FontSize="Large"
+                       VerticalOptions="Start" 
+                       HorizontalOptions="StartAndExpand" />
 
 
-            <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" Margin="0, 5, 0, 0">
-                <Frame Padding="10" HorizontalOptions="CenterAndExpand">
-                    <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand">
-                        <Image Source="woodbadge_200.png" HeightRequest="75" />
-                        <Label x:name="woodbadge" Text="{Binding Path=WoodbadgeCount}"
-                                FontSize="80"
-                                VerticalOptions="Start" 
-                                HorizontalOptions="StartAndExpand" />
+                <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" Margin="0, 5, 0, 0">
+                    <Frame Padding="10" HorizontalOptions="CenterAndExpand">
+                        <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand">
+                            <Image Source="woodbadge_200.png" HeightRequest="75" />
+                            <Label x:name="woodbadge" Text="{Binding Path=WoodbadgeCount}"
+                                    FontSize="80"
+                                    VerticalOptions="Start" 
+                                    HorizontalOptions="StartAndExpand" />
+                        </StackLayout>
+                    </Frame>
+                    <Frame Padding="10" IsVisible="{Binding GeorgesPoints, Converter={StaticResource emptyToFalse}}">
+                        <StackLayout Orientation="Horizontal" >
+                            <Image Source="georgspunkte_256.png" HeightRequest="75" />
+                            <Label x:name="georgesPoints" Text="{Binding Path=GeorgesPoints}"
+                                    FontSize="80"
+                                    VerticalOptions="Start" 
+                                    HorizontalOptions="StartAndExpand" />
+                        </StackLayout>
+                    </Frame>
+                </StackLayout>
+
+
+                <Label Text="Da komm ich her"
+                       FontSize="Large"
+                       VerticalOptions="End"
+                       HorizontalOptions="StartAndExpand" 
+                       Margin="0, 5, 0, 0" />
+                <Frame Padding="10">
+                    <StackLayout>
+                        <Label Text="Diözese"
+                               VerticalOptions="End"
+                               HorizontalOptions="StartAndExpand" 
+                               Margin="0, 5, 0, 0" />
+                        <Label x:name="diocese" Text="{Binding Path=Diocese.Name}"
+                               FontSize="Large"
+                               VerticalOptions="Start" 
+                               HorizontalOptions="StartAndExpand" />
+
+                        <Label Text="Bezirk"
+                               VerticalOptions="End"
+                               HorizontalOptions="StartAndExpand" 
+                               IsVisible="{Binding Region, Converter={StaticResource nullToFalse}}"
+                               Margin="0, 5, 0, 0" />
+                        <Label x:name="region" Text="{Binding Path=Region.Name}"
+                               FontSize="Large"
+                               VerticalOptions="Start" 
+                               HorizontalOptions="StartAndExpand"
+                               IsVisible="{Binding Region, Converter={StaticResource nullToFalse}}" />
+
+                        <Label Text="Stamm"
+                               VerticalOptions="End"
+                               HorizontalOptions="StartAndExpand" 
+                               Margin="0, 5, 0, 0" />
+                        <Label x:name="tribe" Text="{Binding Path=Tribe.Name}"
+                               FontSize="Large"
+                               VerticalOptions="Start" 
+                               HorizontalOptions="StartAndExpand" />
+
+                        <Label Text="Wohnort"
+                               VerticalOptions="End"
+                               HorizontalOptions="StartAndExpand" 
+                               IsVisible="{Binding Residence, Converter={StaticResource emptyToFalse}}"
+                               Margin="0, 5, 0, 0" />
+                        <Label x:name="residence" Text="{Binding Path=Residence}"
+                               FontSize="Large"
+                               VerticalOptions="Start" 
+                               HorizontalOptions="StartAndExpand"
+                               IsVisible="{Binding Residence, Converter={StaticResource emptyToFalse}}" />
                     </StackLayout>
                 </Frame>
-                <Frame Padding="10" IsVisible="{Binding GeorgesPoints, Converter={StaticResource emptyToFalse}}">
-                    <StackLayout Orientation="Horizontal" >
-                        <Image Source="georgspunkte_256.png" HeightRequest="75" />
-                        <Label x:name="georgesPoints" Text="{Binding Path=GeorgesPoints}"
-                                FontSize="80"
-                                VerticalOptions="Start" 
-                                HorizontalOptions="StartAndExpand" />
-                    </StackLayout>
-                </Frame>
-            </StackLayout>
 
 
-            <Label Text="Da komm ich her"
-                   FontSize="Large"
-                   VerticalOptions="End"
-                   HorizontalOptions="StartAndExpand" 
-                   Margin="0, 5, 0, 0" />
-            <Frame Padding="10">
-                <StackLayout>
-                    <Label Text="Diözese"
-                           VerticalOptions="End"
-                           HorizontalOptions="StartAndExpand" 
-                           Margin="0, 5, 0, 0" />
-                    <Label x:name="diocese" Text="{Binding Path=Diocese.Name}"
-                           FontSize="Large"
-                           VerticalOptions="Start" 
-                           HorizontalOptions="StartAndExpand" />
-
-                    <Label Text="Bezirk"
-                           VerticalOptions="End"
-                           HorizontalOptions="StartAndExpand" 
-                           IsVisible="{Binding Region, Converter={StaticResource nullToFalse}}"
-                           Margin="0, 5, 0, 0" />
-                    <Label x:name="region" Text="{Binding Path=Region.Name}"
-                           FontSize="Large"
-                           VerticalOptions="Start" 
-                           HorizontalOptions="StartAndExpand"
-                           IsVisible="{Binding Region, Converter={StaticResource nullToFalse}}" />
-
-                    <Label Text="Stamm"
-                           VerticalOptions="End"
-                           HorizontalOptions="StartAndExpand" 
-                           Margin="0, 5, 0, 0" />
-                    <Label x:name="tribe" Text="{Binding Path=Tribe.Name}"
-                           FontSize="Large"
-                           VerticalOptions="Start" 
-                           HorizontalOptions="StartAndExpand" />
-
-                    <Label Text="Wohnort"
-                           VerticalOptions="End"
-                           HorizontalOptions="StartAndExpand" 
-                           IsVisible="{Binding Residence, Converter={StaticResource emptyToFalse}}"
-                           Margin="0, 5, 0, 0" />
-                    <Label x:name="residence" Text="{Binding Path=Residence}"
-                           FontSize="Large"
-                           VerticalOptions="Start" 
-                           HorizontalOptions="StartAndExpand"
-                           IsVisible="{Binding Residence, Converter={StaticResource emptyToFalse}}" />
-                </StackLayout>
-            </Frame>
-
-
-            <Label Text="Das bin ich"
-                FontSize="Large"
-                VerticalOptions="End"
-                HorizontalOptions="StartAndExpand" 
-                Margin="0, 5, 0, 0" />
-            <Frame Padding="10">
-                <StackLayout>
-                    <Label Text="Amt / Funktion"
-                           VerticalOptions="End"
-                           HorizontalOptions="StartAndExpand" 
-                           Margin="0, 5, 0, 0" />
-                    <Label x:name="function" Text="{Binding Path=Function.Name}"
-                           FontSize="Large"
-                            VerticalOptions="Start" 
-                            HorizontalOptions="StartAndExpand" />
-
-                    <Label Text="Lieblingsstufe"
-                           VerticalOptions="End"
-                           HorizontalOptions="StartAndExpand" 
-                           IsVisible="{Binding FavouriteStage, Converter={StaticResource emptyToFalse}}"
-                           Margin="0, 5, 0, 0" />
-                    <Label x:name="phone" Text="{Binding Path=FavouriteStage}"
-                           FontSize="Large"
-                            VerticalOptions="Start" 
-                            HorizontalOptions="StartAndExpand"
-                           IsVisible="{Binding FavouriteStage, Converter={StaticResource emptyToFalse}}" />
-
-                    <Label Text="Beziehungsstatus"
-                           VerticalOptions="End"
-                           HorizontalOptions="StartAndExpand" 
-                           IsVisible="{Binding RelationshipStatus, Converter={StaticResource emptyToFalse}}"
-                           Margin="0, 5, 0, 0" />
-                    <Label x:name="phone" Text="{Binding Path=RelationshipStatus}"
-                           FontSize="Large"
-                            VerticalOptions="Start" 
-                            HorizontalOptions="StartAndExpand"
-                           IsVisible="{Binding RelationshipStatus, Converter={StaticResource emptyToFalse}}" />
-                </StackLayout>
-            </Frame>
-
-            <Label Text="So erreichst du mich"
-                FontSize="Large"
-                VerticalOptions="End"
-                HorizontalOptions="StartAndExpand" 
-                Margin="0, 5, 0, 0" />
-            <Frame Padding="10">
-                <StackLayout>
-                    <Label Text="Handynummer"
-                           VerticalOptions="End"
-                           HorizontalOptions="StartAndExpand" 
-                           IsVisible="{Binding Phone, Converter={StaticResource emptyToFalse}}"
-                           Margin="0, 5, 0, 0" />
-                    <Label x:name="phone" Text="{Binding Path=Phone}"
-                           FontSize="Large"
-                           VerticalOptions="Start" 
-                           HorizontalOptions="StartAndExpand"
-                           IsVisible="{Binding Phone, Converter={StaticResource emptyToFalse}}"/>
-
-                    <Label Text="E-Mail"
-                           VerticalOptions="End"
-                           HorizontalOptions="StartAndExpand" 
-                           IsVisible="{Binding Mail, Converter={StaticResource emptyToFalse}}"
-                           Margin="0, 5, 0, 0" />
-                    <Label x:name="mail" Text="{Binding Path=Mail}"
-                           FontSize="Large"
-                           VerticalOptions="Start" 
-                           HorizontalOptions="StartAndExpand"
-                           IsVisible="{Binding Mail, Converter={StaticResource emptyToFalse}}"/>
-                </StackLayout>
-            </Frame>
-
-            <Label Text="Meine Abenteuer"
+                <Label Text="Das bin ich"
                     FontSize="Large"
                     VerticalOptions="End"
                     HorizontalOptions="StartAndExpand" 
                     Margin="0, 5, 0, 0" />
-            <Frame Padding="10">
-                <StackLayout x:Name="adventuresLayout">
+                <Frame Padding="10">
+                    <StackLayout>
+                        <Label Text="Amt / Funktion"
+                               VerticalOptions="End"
+                               HorizontalOptions="StartAndExpand" 
+                               Margin="0, 5, 0, 0" />
+                        <Label x:name="function" Text="{Binding Path=Function.Name}"
+                               FontSize="Large"
+                                VerticalOptions="Start" 
+                                HorizontalOptions="StartAndExpand" />
 
-                </StackLayout>
-            </Frame>
+                        <Label Text="Lieblingsstufe"
+                               VerticalOptions="End"
+                               HorizontalOptions="StartAndExpand" 
+                               IsVisible="{Binding FavouriteStage, Converter={StaticResource emptyToFalse}}"
+                               Margin="0, 5, 0, 0" />
+                        <Label x:name="phone" Text="{Binding Path=FavouriteStage}"
+                               FontSize="Large"
+                                VerticalOptions="Start" 
+                                HorizontalOptions="StartAndExpand"
+                               IsVisible="{Binding FavouriteStage, Converter={StaticResource emptyToFalse}}" />
+
+                        <Label Text="Beziehungsstatus"
+                               VerticalOptions="End"
+                               HorizontalOptions="StartAndExpand" 
+                               IsVisible="{Binding RelationshipStatus, Converter={StaticResource emptyToFalse}}"
+                               Margin="0, 5, 0, 0" />
+                        <Label x:name="phone" Text="{Binding Path=RelationshipStatus}"
+                               FontSize="Large"
+                                VerticalOptions="Start" 
+                                HorizontalOptions="StartAndExpand"
+                               IsVisible="{Binding RelationshipStatus, Converter={StaticResource emptyToFalse}}" />
+                    </StackLayout>
+                </Frame>
+
+                <Label Text="So erreichst du mich"
+                    FontSize="Large"
+                    VerticalOptions="End"
+                    HorizontalOptions="StartAndExpand" 
+                    Margin="0, 5, 0, 0" />
+                <Frame Padding="10">
+                    <StackLayout>
+                        <Label Text="Handynummer"
+                               VerticalOptions="End"
+                               HorizontalOptions="StartAndExpand" 
+                               IsVisible="{Binding Phone, Converter={StaticResource emptyToFalse}}"
+                               Margin="0, 5, 0, 0" />
+                        <Label x:name="phone" Text="{Binding Path=Phone}"
+                               FontSize="Large"
+                               VerticalOptions="Start" 
+                               HorizontalOptions="StartAndExpand"
+                               IsVisible="{Binding Phone, Converter={StaticResource emptyToFalse}}"/>
+
+                        <Label Text="E-Mail"
+                               VerticalOptions="End"
+                               HorizontalOptions="StartAndExpand" 
+                               IsVisible="{Binding Mail, Converter={StaticResource emptyToFalse}}"
+                               Margin="0, 5, 0, 0" />
+                        <Label x:name="mail" Text="{Binding Path=Mail}"
+                               FontSize="Large"
+                               VerticalOptions="Start" 
+                               HorizontalOptions="StartAndExpand"
+                               IsVisible="{Binding Mail, Converter={StaticResource emptyToFalse}}"/>
+                    </StackLayout>
+                </Frame>
+
+                <Label Text="Meine Abenteuer"
+                        FontSize="Large"
+                        VerticalOptions="End"
+                        HorizontalOptions="StartAndExpand" 
+                        Margin="0, 5, 0, 0" />
+                <Frame Padding="10">
+                    <ListView x:Name="adventuresList" ItemsSource="{Binding Adventures}" ItemSelected="OnAdventureSelected">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <ImageCell Text="{Binding Label}" TextColor="SteelBlue" />
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </Frame>
+                <Button x:Name="adventureButton" 
+                        Text="Wir waren auf einem Abenteuer" 
+                        Clicked="AdventureAsync"
+                        IsVisible="{Binding ShowAdventureButton}" />
             
+            
+            </StackLayout>
         </StackLayout>
     </ScrollView>
 </mp:MolaPage>
