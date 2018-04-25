@@ -12,29 +12,59 @@
         </OnPlatform>
     </mp:MolaPage.Padding>
 
-    <StackLayout>
-        <Button x:Name="logoutButton" Text="Logout" Clicked="LogoutAsync" />
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Abmelden" Order="Secondary" Activated="LogoutAsync"/>
+        <ToolbarItem Text="Mein Profil bearbeiten" Order="Secondary" Activated="EditProfileAsync" />
+        <ToolbarItem Text="Mein Profil anzeigen" Order="Secondary" Activated="MyProfileAsync" />
+        <ToolbarItem Text="Über MOLA" Order="Secondary" Activated="AboutAsync" />
+    </ContentPage.ToolbarItems>
 
-        <Button x:Name="editProfileButton" Text="Mein Profil bearbeiten" Clicked="EditProfileAsync" />
+    <ScrollView>
+        <StackLayout VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Padding="15, 15">
 
-        <Button x:Name="myProfileButton" Text="Mein Profil anzeigen" Clicked="MyProfileAsync" />
+            <StackLayout VerticalOptions="Center" HorizontalOptions="End">
+                <Image x:Name="bookmarkButton"
+                HeightRequest="100"
+                Source="bookmark.png"
+                VerticalOptions="Start" 
+                HorizontalOptions="Center">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer
+                        Tapped="BookmarksAsync"
+                        NumberOfTapsRequired="1" />
+                    </Image.GestureRecognizers>
+                </Image>
+                <Label Text="Merkliste" XAlign="Center" Margin="0,-5,0,20" />
+            </StackLayout>
 
-        <Button x:Name="bookmarksButton" Text="Merkliste" Clicked="BookmarksAsync" />
-        
-        <Button x:Name="historyButton" Text="Historie" Clicked="HistoryAsync" />
-        
-        <Image x:Name="scanButton"
-            HeightRequest="150"
-            Source="scan_qrcode.png"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center">
-            <Image.GestureRecognizers>
-                <TapGestureRecognizer
-                    Tapped="ScanAsync"
-                     NumberOfTapsRequired="1" />
-            </Image.GestureRecognizers>
-        </Image>
+            <Image x:Name="scanButton"
+                HeightRequest="175"
+                Source="scan_qrcode.png"
+                VerticalOptions="Center" 
+                HorizontalOptions="Center">
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer
+                        Tapped="ScanAsync"
+                        NumberOfTapsRequired="1" />
+                </Image.GestureRecognizers>
+            </Image>
+            <Label Text="Code scannen" XAlign="Center" Margin="0,-5,0,20" />
 
-    </StackLayout>
+            <StackLayout VerticalOptions="End" HorizontalOptions="Start">
+                <Image x:Name="historyButton"
+                HeightRequest="100"
+                Source="history.png"
+                VerticalOptions="Center" 
+                HorizontalOptions="Center">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer
+                        Tapped="HistoryAsync"
+                        NumberOfTapsRequired="1" />
+                    </Image.GestureRecognizers>
+                </Image>
+                <Label Text="Historie" XAlign="Center" Margin="0,-5,0,0" />
+            </StackLayout>
 
+        </StackLayout>
+    </ScrollView>
 </mp:MolaPage>

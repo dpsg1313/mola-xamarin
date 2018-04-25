@@ -43,12 +43,7 @@ namespace MolaApp.Api
             var cache = BlobCache.LocalMachine;
             return cache.GetAndFetchLatest(
                 key,
-                () => GetRemoteAsync(profileId),
-                offset =>
-                {
-                    TimeSpan elapsed = DateTimeOffset.Now - offset;
-                    return elapsed > new TimeSpan(hours: 0, minutes: 1, seconds: 0);
-                }
+                () => GetRemoteAsync(profileId)
             );
         }
 
@@ -62,13 +57,13 @@ namespace MolaApp.Api
             return await cachedPromise.FirstOrDefaultAsync();
         }
 
-        public async Task<bool> AddAsync(string profileId, int myPoints, int otherPoints)
+        public async Task<bool> AddAsync(string profileId, float myPoints, float withPoints)
         {
             NewAdventureModel model = new NewAdventureModel
             {
                 ImageId = "",
                 MyPoints = myPoints,
-                OtherPoints = otherPoints
+                WithPoints = withPoints
             };
 
             string path = PATH_POST + "/" + profileId;

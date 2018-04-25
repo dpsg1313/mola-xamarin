@@ -53,12 +53,7 @@ namespace MolaApp.Api
             return Observable.Select(
                 cache.GetAndFetchLatest(
                     key,
-                    async () => await GetRemoteAsync(id),
-                    offset =>
-                    {
-                        TimeSpan elapsed = DateTimeOffset.Now - offset;
-                        return elapsed > new TimeSpan(hours: 0, minutes: 1, seconds: 0);
-                    }
+                    async () => await GetRemoteAsync(id)
                 ),
                 promised =>
                 {

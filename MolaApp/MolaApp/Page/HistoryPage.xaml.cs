@@ -15,7 +15,7 @@ namespace MolaApp.Page
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class HistoryPage : MolaPage
 	{
-        const string DATETIME_FORMAT = "dddd, d.M.yyyy H:mm";
+        const string DATETIME_FORMAT = "dddd, d.M.yyyy H:mm 'Uhr'";
 
         HistoryController historyController;
         ProfileApi profileApi;
@@ -25,7 +25,7 @@ namespace MolaApp.Page
 
         Dictionary<string, HistoryViewModel> _history;
 
-        CancellationTokenSource cts = new CancellationTokenSource();
+        CancellationTokenSource cts;
 
         public HistoryPage(ServiceContainer container) : base(container)
 		{
@@ -44,8 +44,9 @@ namespace MolaApp.Page
         protected override void OnAppearing()
         {
             base.OnAppearing();
+            cts = new CancellationTokenSource();
 
-            foreach(HistoryModel model in historyController.History.OrderBy(m => m.Date, new DateTimeOffsetInvertedComparer()))
+            foreach (HistoryModel model in historyController.History.OrderBy(m => m.Date, new DateTimeOffsetInvertedComparer()))
             {
                 string profileId = model.ProfileId;
 

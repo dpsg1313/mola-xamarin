@@ -1,14 +1,38 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <mp:MolaPage xmlns="http://xamarin.com/schemas/2014/forms"
-                xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-                xmlns:mp="clr-namespace:MolaApp.Page"
-                x:Class="MolaApp.Page.BookmarksPage"
-                Title="Merkliste">
+            xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+            xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+            xmlns:fftransformations="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
+            xmlns:mp="clr-namespace:MolaApp.Page"
+            x:Class="MolaApp.Page.BookmarksPage"
+            Title="Merkliste">
 
-    <ListView x:Name="bookmarkList" ItemsSource="{Binding Bookmarks}" ItemTapped="OnItemTapped">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Order="Primary" Icon="bookmark_small_grey.png"/>
+    </ContentPage.ToolbarItems>
+    
+    <ListView x:Name="bookmarkList" ItemsSource="{Binding Bookmarks}" RowHeight="100" ItemTapped="OnItemTapped">
         <ListView.ItemTemplate>
             <DataTemplate>
-                <ImageCell Text="{Binding Label}" ImageSource="{Binding Image}" />
+                <ViewCell>
+                    <StackLayout Orientation="Horizontal" HeightRequest="100" Padding="5">
+                        <ffimageloading:CachedImage
+                            Source="{Binding Image}"
+                            LoadingPlaceholder="avatar.png"
+                            ErrorPlaceholder="avatar.png"
+                            HeightRequest="100"
+                            WidthRequest="100"
+                            DownsampleToViewSize="true"
+                            Aspect="AspectFit"
+                            HorizontalOptions="Start">
+                            <ffimageloading:CachedImage.Transformations>
+                                <fftransformations:CircleTransformation/>
+                            </ffimageloading:CachedImage.Transformations>
+                        </ffimageloading:CachedImage>
+
+                        <Label Text="{Binding Label}" FontSize="Large" FontAttributes="Bold" TextColor="SteelBlue" XAlign="Start" VerticalOptions="Center" />
+                    </StackLayout>
+                </ViewCell>
             </DataTemplate>
         </ListView.ItemTemplate>
     </ListView>

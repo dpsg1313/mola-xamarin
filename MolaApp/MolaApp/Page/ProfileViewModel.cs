@@ -52,6 +52,7 @@ namespace MolaApp.Page
                 {
                     isMyProfile = value;
                     OnPropertyChanged(nameof(IsMyProfile));
+                    OnPropertyChanged(nameof(ShowAdventureButton));
                 }
             }
         }
@@ -66,7 +67,15 @@ namespace MolaApp.Page
                 {
                     isBookmarked = value;
                     OnPropertyChanged(nameof(IsBookmarked));
+                    OnPropertyChanged(nameof(BookmarkImage));
                 }
+            }
+        }
+
+        public string BookmarkImage
+        {
+            get {
+                return isBookmarked ? "bookmark_small.png" : "bookmark_small_grey.png";
             }
         }
 
@@ -154,6 +163,34 @@ namespace MolaApp.Page
             }
         }
 
+        string firstname;
+        public string Firstname
+        {
+            get { return firstname; }
+            set
+            {
+                if (firstname != value)
+                {
+                    firstname = value;
+                    OnPropertyChanged(nameof(Firstname));
+                }
+            }
+        }
+
+        string lastname;
+        public string Lastname
+        {
+            get { return lastname; }
+            set
+            {
+                if (lastname != value)
+                {
+                    lastname = value;
+                    OnPropertyChanged(nameof(Lastname));
+                }
+            }
+        }
+
         string phone;
         public string Phone
         {
@@ -178,6 +215,20 @@ namespace MolaApp.Page
                 {
                     mail = value;
                     OnPropertyChanged(nameof(Mail));
+                }
+            }
+        }
+
+        bool showContact;
+        public bool ShowContact
+        {
+            get { return showContact; }
+            set
+            {
+                if (showContact != value)
+                {
+                    showContact = value;
+                    OnPropertyChanged(nameof(ShowContact));
                 }
             }
         }
@@ -257,7 +308,7 @@ namespace MolaApp.Page
         {
             get
             {
-                return showAdventureButton && !isMyProfile;
+                return showAdventureButton;
             }
             set
             {
@@ -268,5 +319,52 @@ namespace MolaApp.Page
                 }
             }
         }
+
+        bool showAdventures;
+        public bool ShowAdventures
+        {
+            get
+            {
+                return showAdventures;
+            }
+            set
+            {
+                if (showAdventures != value)
+                {
+                    showAdventures = value;
+                    OnPropertyChanged(nameof(ShowAdventures));
+                }
+            }
+        }
+
+        FormattedString possiblePoints;
+        public FormattedString PossiblePoints
+        {
+            get { return possiblePoints; }
+            set
+            {
+                if (possiblePoints != value)
+                {
+                    possiblePoints = value;
+                    OnPropertyChanged(nameof(PossiblePoints));
+                }
+            }
+        }
+
+        FormattedString adventurePoints;
+        public FormattedString AdventurePoints
+        {
+            get { return adventurePoints; }
+            set
+            {
+                if (adventurePoints != value)
+                {
+                    adventurePoints = value;
+                    OnPropertyChanged(nameof(AdventurePoints));
+                }
+            }
+        }
+
+
     }
 }

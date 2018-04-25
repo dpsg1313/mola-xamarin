@@ -3,8 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MolaApp.Page.LoadingPage">
 
-    <StackLayout>
-        <Image Source="logo_hands_512.png" HorizontalOptions="Center" VerticalOptions="Center" HeightRequest="300" WidthRequest="300" Margin="30, 30, 30, 30"/>
-        <ActivityIndicator IsRunning="True" Color="SteelBlue" />
+    <StackLayout VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" BackgroundColor="LightSteelBlue">
+        <Image Source="logo_hands_512.png" HorizontalOptions="CenterAndExpand" VerticalOptions="Center" HeightRequest="300" WidthRequest="300" Margin="50, 50, 50, 30"/>
+        <ActivityIndicator IsRunning="True" Color="SteelBlue" HorizontalOptions="Center" />
     </StackLayout>
 </ContentPage>

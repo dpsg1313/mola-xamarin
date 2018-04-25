@@ -1,16 +1,18 @@
-﻿using MolaApp.Model;
+﻿using Akavache;
+using MolaApp.Model;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Diagnostics;
 using System.Net;
 using System.Net.Http;
+using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace MolaApp.Api
 {
-    public class UserApi : AbstractGetObjectApi<UserModel>, IUserApi
+    public class UserApi : AbstractApi, IUserApi
     {
         public static string ConflictFieldEmail = "email";
         public static string ConflictFieldId = "id";
@@ -20,7 +22,7 @@ namespace MolaApp.Api
 
         }
 
-        protected override string ObjectName()
+        protected string ObjectName()
         {
             return "user";
         }

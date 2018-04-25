@@ -22,6 +22,20 @@ namespace MolaApp.Page
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        bool isBusy;
+        public bool IsBusy
+        {
+            get { return isBusy; }
+            set
+            {
+                if (isBusy != value)
+                {
+                    isBusy = value;
+                    OnPropertyChanged(nameof(IsBusy));
+                }
+            }
+        }
+
         public void WriteToModel(ProfileModel model)
         {
             model.DioceseId = selectedDiocese?.Id ?? "";
@@ -62,6 +76,8 @@ namespace MolaApp.Page
             model.Phone = phone;
             model.Mail = mail;
             model.WoodbadgeCount = woodbadgeCount;
+            model.Association = association;
+            model.IsPriest = isPriest;
         }
 
         IList<Diocese> dioceseList;
@@ -254,6 +270,49 @@ namespace MolaApp.Page
                 {
                     selectedFunction = value;
                     OnPropertyChanged(nameof(SelectedFunction));
+                }
+            }
+        }
+
+        public List<string> AssociationList
+        {
+            get
+            {
+                return new List<string>()
+                {
+                    "kein e.V.-Mitglied",
+                    "Stammes-e.V.",
+                    "Bezirks-e.V.",
+                    "Diözesan-e.V.",
+                    "Bundes-e.V."
+                };
+            }
+        }
+
+        string association;
+        public string Association
+        {
+            get { return association; }
+            set
+            {
+                if (association != value)
+                {
+                    association = value;
+                    OnPropertyChanged(nameof(Association));
+                }
+            }
+        }
+
+        bool isPriest;
+        public bool IsPriest
+        {
+            get { return isPriest; }
+            set
+            {
+                if (isPriest != value)
+                {
+                    isPriest = value;
+                    OnPropertyChanged(nameof(IsPriest));
                 }
             }
         }

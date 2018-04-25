@@ -43,12 +43,7 @@ namespace MolaApp.Api
             var cache = BlobCache.LocalMachine;
             return cache.GetAndFetchLatest(
                 key,
-                () => GetRemoteAsync(id),
-                offset =>
-                {
-                    TimeSpan elapsed = DateTimeOffset.Now - offset;
-                    return elapsed > new TimeSpan(hours: 0, minutes: 1, seconds: 0);
-                }
+                () => GetRemoteAsync(id)
             );
         }
 

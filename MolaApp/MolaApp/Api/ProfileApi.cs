@@ -31,7 +31,7 @@ namespace MolaApp.Api
             {
                 string key = ObjectName() + "_" + profile.Id;
                 var cache = BlobCache.LocalMachine;
-                cache.InsertObject<ProfileModel>(key, profile, TimeSpan.FromMinutes(10));
+                cache.InsertObject<ProfileModel>(key, profile);
                 return true;
             }
             else

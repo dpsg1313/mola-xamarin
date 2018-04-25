@@ -1,88 +1,104 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <mp:MolaPage xmlns="http://xamarin.com/schemas/2014/forms"
-          xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-          xmlns:mp="clr-namespace:MolaApp.Page"
-          x:Class="MolaApp.Page.RegistrationPage"
-             Title="Account erstellen">
+            xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+            xmlns:mp="clr-namespace:MolaApp.Page"
+            x:Class="MolaApp.Page.RegistrationPage"
+            Title="Account erstellen">
 
     <ContentPage.Resources>
         <ResourceDictionary>
             <mp:EmptyStringToFalseConverter x:Key="emptyToFalse" />
             <mp:EmptyStringToTrueConverter x:Key="emptyToTrue" />
+            <mp:InverseBooleanConverter x:Key="InverseBoolean" />
         </ResourceDictionary>
     </ContentPage.Resources>
 
-    <ScrollView>
-        <StackLayout>
+    <AbsoluteLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
 
-            <Label Text="Scanne deinen Aufnäher um ihn mit dem neuen Account zu verknüpfen!"
-                    FontSize="Large"
+        <ScrollView AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1">
+            <StackLayout HorizontalOptions="CenterAndExpand" IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBoolean}}" Padding="20">
+
+                <Label Text="Scanne deinen Aufnäher um ihn mit dem neuen Account zu verknüpfen!"
+                    FontSize="Medium"
+                    XAlign="Center"
+                    Margin="0, 20, 0, 0"
                     VerticalOptions="Start" 
                     HorizontalOptions="CenterAndExpand" />
 
-            <Label Text="Dein Code lautet"
-                   Margin="10, 30, 10, 0"
-                   FontSize="Large"
+                <Label Text="Dein Code lautet"
+                    Margin="0, 30, 0, 0"
+                    FontSize="Medium"
+                    XAlign="Center"
                     VerticalOptions="Center" 
                     HorizontalOptions="Center"
-                   IsVisible="{Binding ScannedId, Converter={StaticResource emptyToFalse}}"/>
-            <Label Text="{Binding ScannedId}"
-                   Margin="10, 10, 10, 0"
-                   FontSize="Medium"
-                   TextColor="LightSteelBlue"
+                    IsVisible="{Binding ScannedId, Converter={StaticResource emptyToFalse}}"/>
+                <Label Text="{Binding ScannedId}"
+                    Margin="0, 10, 0, 0"
+                    FontSize="Medium"
+                    XAlign="Center"
+                    TextColor="LightSteelBlue"
                     VerticalOptions="Center" 
                     HorizontalOptions="Center"
-                   IsVisible="{Binding ScannedId, Converter={StaticResource emptyToFalse}}"/>
+                    IsVisible="{Binding ScannedId, Converter={StaticResource emptyToFalse}}"/>
 
-            <Image x:Name="scanButton"
-                   Margin="10, 20, 10, 0"
-                   HeightRequest="100"
-                   Source="scan_qrcode.png"
-                   VerticalOptions="Center" 
-                   HorizontalOptions="Center"
-                   IsVisible="{Binding ScannedId, Converter={StaticResource emptyToTrue}}" >
-                <Image.GestureRecognizers>
-                    <TapGestureRecognizer
-                        Tapped="ScanAsync"
-                        NumberOfTapsRequired="1" />
-                </Image.GestureRecognizers>
-            </Image>
+                <Image x:Name="scanButton"
+                    Margin="0, 20, 0, 0"
+                    HeightRequest="150"
+                    Source="scan_qrcode.png"
+                    VerticalOptions="Center" 
+                    HorizontalOptions="Center"
+                    IsVisible="{Binding ScannedId, Converter={StaticResource emptyToTrue}}" >
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer
+                            Tapped="ScanAsync"
+                            NumberOfTapsRequired="1" />
+                    </Image.GestureRecognizers>
+                </Image>
 
-            <Entry x:Name="passwordEntry" 
-                   Margin="10, 20, 10, 0"
-               Placeholder="Passwort" 
-               IsPassword="True"  />
-            <Entry x:Name="passwordConfirmEntry"
-                   Margin="10, 0"
-               Placeholder="Passwort bestätigen"
-               IsPassword="True"/>
+                <Entry x:Name="passwordEntry" 
+                    Margin="0, 20, 0, 0"
+                    Placeholder="Passwort" 
+                    IsPassword="True"  />
+                <Entry x:Name="passwordConfirmEntry"
+                    Margin="0"
+                    Placeholder="Passwort bestätigen"
+                    IsPassword="True"/>
 
-            <Label x:Name="privacyLabel" Margin="10, 20, 10, 0"
+                <Label x:Name="privacyLabel" Margin="0, 20, 0, 0"
                     VerticalOptions="Center" 
                     HorizontalOptions="CenterAndExpand">
-                <Label.FormattedText>
-                    <FormattedString>
-                        <Span Text="Mit Klick auf 'Account erstellen' akzeptierst du die " FontSize="Medium" />
-                        <Span Text="Datenschutzerklärung" FontAttributes="Bold" FontSize="Medium" ForegroundColor="LightSteelBlue"/>
-                    </FormattedString>
-                </Label.FormattedText>
-                <Label.GestureRecognizers>
-                    <TapGestureRecognizer
-                        Tapped="ShowPrivacyPolicy"
-                        NumberOfTapsRequired="1" />
-                </Label.GestureRecognizers>
-            </Label>
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Mit Klick auf 'Account&#160;erstellen' akzeptierst du die " FontSize="Medium" />
+                            <Span Text="Datenschutzerklärung" FontAttributes="Bold" FontSize="Medium" ForegroundColor="LightSteelBlue" />
+                        </FormattedString>
+                    </Label.FormattedText>
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer
+                            Tapped="ShowPrivacyPolicy"
+                            NumberOfTapsRequired="1" />
+                    </Label.GestureRecognizers>
+                </Label>
 
-            <StackLayout Orientation="Horizontal" Margin="0, 20, 0, 0" VerticalOptions="Center" HorizontalOptions="CenterAndExpand">
                 <Button x:Name="registerButton" 
                     Text="Account erstellen" 
                     Clicked="RegisterAsync" 
                     IsEnabled="{Binding ScannedId, Converter={StaticResource emptyToFalse}}" />
-
-                <Button x:Name="cancelButton" 
-                    Text="Abbrechen"  
-                    Clicked="CancelAsync" />
-            </StackLayout>
+                </StackLayout>
+        </ScrollView>
+        
+        <StackLayout 
+            IsVisible="{Binding IsBusy}"
+            BackgroundColor="LightSteelBlue"
+            Opacity="0.6"
+            AbsoluteLayout.LayoutFlags="All"
+            AbsoluteLayout.LayoutBounds="0,0,1,1">
         </StackLayout>
-    </ScrollView>
+        <ActivityIndicator 
+            AbsoluteLayout.LayoutFlags="PositionProportional"
+            AbsoluteLayout.LayoutBounds="0.5,0.5,-1,-1"
+            IsRunning="{Binding IsBusy}" 
+            Color="SteelBlue" />
+        
+    </AbsoluteLayout>
 </mp:MolaPage>

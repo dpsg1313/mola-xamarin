@@ -1,48 +1,73 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <mp:MolaPage xmlns="http://xamarin.com/schemas/2014/forms"
           xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+          xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+          xmlns:fftransformations="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
           xmlns:mp="clr-namespace:MolaApp.Page"
           x:Class="MolaApp.Page.ProfileEditPage"
              Title="Mein Profil bearbeiten">
 
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <mp:InverseBooleanConverter x:Key="InverseBoolean" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
 
-    <ScrollView>
-        <StackLayout>
-            <Image x:Name="picture" Margin="50, 10" Source="{Binding Image}">
-                <Image.GestureRecognizers>
-                    <TapGestureRecognizer
-                    Tapped="PictureOptionsAsync"
-                    NumberOfTapsRequired="1" />
-                </Image.GestureRecognizers>
-            </Image>
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Icon="save_small.png" Text="Speichern" Activated="SaveAsync" Order="Primary" />
+    </ContentPage.ToolbarItems>
 
-            <Label Text="Die mit einem * gekennzeichneten Felder sind Pflichtfelder. Beim Rest entscheidest du selbst, was du in deinem Profil preisgeben möchtest!"
+    <AbsoluteLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+
+        <ScrollView AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1">
+            <StackLayout IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBoolean}}" Padding="10">
+
+                <ffimageloading:CachedImage
+                    x:Name="picture"
+                    Margin="40, 0"
+                    Source="{Binding Image}"
+                    LoadingPlaceholder="avatar.png"
+                    ErrorPlaceholder="avatar.png"
+                    DownsampleToViewSize="true"
+                    Aspect="AspectFit"
+                    HorizontalOptions="CenterAndExpand">
+                    <ffimageloading:CachedImage.Transformations>
+                        <fftransformations:CircleTransformation/>
+                    </ffimageloading:CachedImage.Transformations>
+                    <ffimageloading:CachedImage.GestureRecognizers>
+                        <TapGestureRecognizer
+                            Tapped="PictureOptionsAsync"
+                            NumberOfTapsRequired="1" />
+                    </ffimageloading:CachedImage.GestureRecognizers>
+                </ffimageloading:CachedImage>
+
+                <Label Text="Die mit einem Stern gekennzeichneten Felder sind Pflichtfelder. Beim Rest entscheidest du selbst, was du in deinem Profil preisgeben möchtest!"
                    VerticalOptions="End"
                    HorizontalOptions="StartAndExpand" />
 
-            <Label Text="Vorname *"
+                <Label Text="Vorname *"
                    VerticalOptions="End"
                    HorizontalOptions="StartAndExpand"
                    Margin="0, 5, 0, 0" />
-            <Entry x:Name="firstnameEntry"
+                <Entry x:Name="firstnameEntry"
                    VerticalOptions="Start"
                    HorizontalOptions="FillAndExpand" 
                    Text="{Binding Firstname}" />
-            
-            <Label Text="Nachname *"
+
+                <Label Text="Nachname *"
                    VerticalOptions="End"
                    HorizontalOptions="StartAndExpand"
                    Margin="0, 5, 0, 0" />
-            <Entry x:Name="lastnameEntry"
+                <Entry x:Name="lastnameEntry"
                    VerticalOptions="Start"
                    HorizontalOptions="FillAndExpand" 
                    Text="{Binding Lastname}" />
 
-            <Label Text="Diözese *"
+                <Label Text="Diözese *"
                    VerticalOptions="End"
                    HorizontalOptions="StartAndExpand" 
                    Margin="0, 5, 0, 0" />
-            <Picker x:Name="diocesePicker"
+                <Picker x:Name="diocesePicker"
                     Title="Wähle deine Diözese aus"
                     VerticalOptions="Start"
                     HorizontalOptions="FillAndExpand"
@@ -50,11 +75,11 @@
                     ItemDisplayBinding="{Binding Name}"
                     SelectedItem="{Binding SelectedDiocese}" />
 
-            <Label Text="Bezirk *"
+                <Label Text="Bezirk *"
                    VerticalOptions="End"
                    HorizontalOptions="StartAndExpand" 
                    Margin="0, 5, 0, 0" />
-            <Picker x:Name="regionPicker"
+                <Picker x:Name="regionPicker"
                     Title="Wähle deinen Bezirk aus"
                     VerticalOptions="Start"
                     HorizontalOptions="FillAndExpand"
@@ -63,11 +88,11 @@
                     ItemDisplayBinding="{Binding Name}"
                     SelectedItem="{Binding SelectedRegion}" />
 
-            <Label Text="Stamm *"
+                <Label Text="Stamm *"
                    VerticalOptions="End"
                    HorizontalOptions="StartAndExpand" 
                    Margin="0, 5, 0, 0" />
-            <Picker x:Name="tribePicker"
+                <Picker x:Name="tribePicker"
                     Title="Wähle deinen Stamm aus"
                     VerticalOptions="Start"
                     HorizontalOptions="FillAndExpand"
@@ -76,11 +101,11 @@
                     ItemDisplayBinding="{Binding Name}"
                     SelectedItem="{Binding SelectedTribe}" />
 
-            <Label Text="Amt / Funktion *"
+                <Label Text="Amt / Funktion *"
                    VerticalOptions="End"
                    HorizontalOptions="StartAndExpand" 
                    Margin="0, 5, 0, 0" />
-            <Picker x:Name="functionPicker"
+                <Picker x:Name="functionPicker"
                     Title="Wähle deine Funktion aus"
                     VerticalOptions="Start"
                     HorizontalOptions="FillAndExpand"
@@ -88,88 +113,121 @@
                     ItemDisplayBinding="{Binding Name}"
                     SelectedItem="{Binding SelectedFunction}" />
 
-            <Label Text="Anzahl Klötzchen (Woodbadge) *"
+                <Label Text="Anzahl Klötzchen (Woodbadge) *"
                    VerticalOptions="End"
                    HorizontalOptions="StartAndExpand" 
                    Margin="0, 5, 0, 0" />
-            <Picker x:Name="woodbadgePicker"
+                <Picker x:Name="woodbadgePicker"
                     Title="Wie viele Klötzchen hast du?"
                     VerticalOptions="Start"
                     HorizontalOptions="FillAndExpand"
                     ItemsSource="{Binding WoodbadgeList}"
                     SelectedItem="{Binding WoodbadgeCount}" />
 
-            <Label Text="Lieblingsstufe"
+                <Label Text="e.V.-Mitglied *"
                    VerticalOptions="End"
                    HorizontalOptions="StartAndExpand" 
                    Margin="0, 5, 0, 0" />
-            <Picker x:Name="stagePicker"
+                <Picker x:Name="associationPicker"
+                    Title="Bist du e.V.-Mitglied"
+                    VerticalOptions="Start"
+                    HorizontalOptions="FillAndExpand"
+                    ItemsSource="{Binding AssociationList}"
+                    SelectedItem="{Binding Association}" />
+
+                <Label Text="Priester *"
+                   VerticalOptions="End"
+                   HorizontalOptions="StartAndExpand" 
+                   Margin="0, 5, 0, 0" />
+                <StackLayout Orientation="Horizontal">
+                    <Label Text="Bist du Priester?" />
+
+                    <Switch IsToggled="{Binding IsPriest}" />
+                </StackLayout>
+
+                <Label Text="Lieblingsstufe"
+                   VerticalOptions="End"
+                   HorizontalOptions="StartAndExpand" 
+                   Margin="0, 5, 0, 0" />
+                <Picker x:Name="stagePicker"
                     Title="Welche Stufe magst du am liebsten?"
                     VerticalOptions="Start"
                     HorizontalOptions="FillAndExpand"
                     ItemsSource="{Binding StagesList}"
                     SelectedItem="{Binding FavouriteStage}" />
 
-            <Label Text="Handynummer"
+                <Label Text="Handynummer"
                    VerticalOptions="End"
                    HorizontalOptions="StartAndExpand" 
                    Margin="0, 5, 0, 0" />
-            <Entry x:Name="phoneEntry"
+                <Entry x:Name="phoneEntry"
                    VerticalOptions="Start"
                    HorizontalOptions="FillAndExpand"
                    Keyboard="Telephone"
                    Text="{Binding Phone}" />
 
-            <Label Text="E-Mail"
+                <Label Text="E-Mail"
                    VerticalOptions="End"
                    HorizontalOptions="StartAndExpand" 
                    Margin="0, 5, 0, 0" />
-            <Entry x:Name="mailEntry"
+                <Entry x:Name="mailEntry"
                    VerticalOptions="Start"
                    HorizontalOptions="FillAndExpand" 
                    Keyboard="Email"
                    Text="{Binding Mail}" />
 
-            <Label Text="Wohnort"
+                <Label Text="Wohnort"
                    VerticalOptions="End"
                    HorizontalOptions="StartAndExpand" 
                    Margin="0, 5, 0, 0" />
-            <Entry x:Name="residenceEntry"
+                <Entry x:Name="residenceEntry"
                    VerticalOptions="Start"
                    HorizontalOptions="FillAndExpand" 
                    Text="{Binding Residence}" />
 
-            <Label Text="Beziehungsstatus"
+                <Label Text="Beziehungsstatus"
                    VerticalOptions="End"
                    HorizontalOptions="StartAndExpand" 
                    Margin="0, 5, 0, 0" />
-            <Picker x:Name="relationshipStatusPicker"
+                <Picker x:Name="relationshipStatusPicker"
                     Title="Gib deinen Beziehungsstatus an"
                     VerticalOptions="Start"
                     HorizontalOptions="FillAndExpand"
                     ItemsSource="{Binding RelationshipStatusList}"
                     SelectedItem="{Binding RelationshipStatus}" />
 
-            <Label Text="Verdiente 'echte' Georgspunkte"
+                <Label Text="Verdiente 'echte' Georgspunkte"
                    VerticalOptions="End"
                    HorizontalOptions="StartAndExpand" 
                    Margin="0, 5, 0, 0" />
-            <Entry x:Name="georgesPointsEntry"
+                <Entry x:Name="georgesPointsEntry"
                    VerticalOptions="Start"
                    HorizontalOptions="FillAndExpand" 
                    Keyboard="Numeric"
                    Text="{Binding GeorgesPoints}" />
 
-            <StackLayout Orientation="Horizontal">
                 <Button x:Name="saveButton" 
-                        Text="Speichern" 
-                        Clicked="SaveAsync" 
-                        BackgroundColor="LawnGreen"/>
-                <Button x:Name="cancelButton" 
-                        Text="Abbrechen"  
-                        Clicked="CancelAsync"/>
+                    Text="Speichern" 
+                    Margin="0, 5, 0, 0"
+                    Clicked="SaveAsync" 
+                    BackgroundColor="LightSteelBlue" />
+
             </StackLayout>
-            
+        </ScrollView>
+
+        <StackLayout 
+            IsVisible="{Binding IsBusy}"
+            BackgroundColor="LightSteelBlue"
+            Opacity="0.6"
+            AbsoluteLayout.LayoutFlags="All"
+            AbsoluteLayout.LayoutBounds="0,0,1,1">
         </StackLayout>
-    </ScrollView>
+        <ActivityIndicator 
+            AbsoluteLayout.LayoutFlags="PositionProportional"
+            AbsoluteLayout.LayoutBounds="0.5,0.5,-1,-1"
+            IsRunning="{Binding IsBusy}" 
+            Color="SteelBlue" />
+        
+
+    </AbsoluteLayout>
 </mp:MolaPage>

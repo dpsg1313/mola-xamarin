@@ -17,15 +17,19 @@ namespace MolaApp.Page
 	public partial class LoginPage : MolaPage
 	{
         AuthController authController;
+        ProfileApi profileApi;
 
-        string userId;
+        LoginViewModel viewModel;
 
         public LoginPage (ServiceContainer container) : base(container)
 		{
 			InitializeComponent ();
-            BindingContext = this;
+
+            viewModel = new LoginViewModel();
+            BindingContext = viewModel;
 
             authController = Container.Get<AuthController>("auth");
+            profileApi = Container.Get<ProfileApi>("api/profile");
         }
 
         async void RegisterAsync(object sender, EventArgs e)
@@ -48,7 +52,7 @@ namespace MolaApp.Page
                 // Stop scanning
                 scanPage.IsScanning = false;
 
-                userId = result.Text;
+                viewModel.ScannedId = result.Text;
 
                 waitHandle.Set();
 
@@ -62,24 +66,25 @@ namespace MolaApp.Page
             await Navigation.PushModalAsync(scanPage);
 
             await Task.Run(() => waitHandle.WaitOne());
-
-            scanLabel.Text = userId;
         }
 
         async void LoginAsync(object sender, EventArgs e)
         {
-            UserModel credentials = new UserModel(userId);
+            viewModel.IsBusy = true;
+            UserModel credentials = new UserModel(viewModel.ScannedId);
             credentials.Password = passwordEntry.Text;
             bool success = await authController.LoginAsync(credentials);
             if (success)
             {
                 Navigation.InsertPageBefore(new MainPage(Container), this);
                 await Navigation.PopAsync();
+                DependencyService.Get<IToastMessage>().ShortAlert("Login erfolgreich");
             }
             else
             {
-                await DisplayAlert("Login fehlgeschlagen", "Möglicherweise hast du ein falsches Passwort eingegeben oder du hast gerade keine aureichende Internetverbindung.", "Ok");
+                await DisplayAlert("Login fehlgeschlagen", "Möglicherweise hast du ein falsches Passwort eingegeben oder du hast gerade keine ausreichende Internetverbindung.", "Ok");
             }
+            viewModel.IsBusy = false;
         }
     }
 }

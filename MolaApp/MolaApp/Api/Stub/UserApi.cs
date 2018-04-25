@@ -28,20 +28,6 @@ namespace MolaApp.Api.Stub
             });
         }
 
-        public IObservable<UserModel> Get(string id)
-        {
-            UserModel model = null;
-            dict.TryGetValue(id, out model);
-            return Observable.Return(model);
-        }
-
-        public async Task<UserModel> GetAsync(string id)
-        {
-            UserModel model = null;
-            dict.TryGetValue(id, out model);
-            return model;
-        }
-
         public async Task CreateAsync(UserModel user)
         {
             if (dict.ContainsKey(user.Id))

@@ -35,7 +35,7 @@
                    FontSize="Large"
                    VerticalOptions="Center" 
                    HorizontalOptions="StartAndExpand" />
-            <Label Text="Die Daten, die du während der Nutzung von MOLA bereitstellst, sowie die Daten, die von MOLA protokolliert werden, werden auf unseren Servern gespeichert"
+            <Label Text="Die persönlichen Daten, die du während der Nutzung von MOLA eingibst (einschließlich deiner Fotos) werden auf unseren Servern gespeichert sowie anderen Nutzern von MOLA zugänglich gemacht. Zu keiner Zeit geben wir deine persönlichen Daten an dritte weiter."
                    VerticalOptions="Center" 
                    HorizontalOptions="StartAndExpand" />
 

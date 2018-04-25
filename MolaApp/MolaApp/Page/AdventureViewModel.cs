@@ -25,19 +25,19 @@ namespace MolaApp.Page
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        //ImageSource image;
-        //public ImageSource Image
-        //{
-        //    get { return image; }
-        //    set
-        //    {
-        //        if (image != value)
-        //        {
-        //            image = value;
-        //            OnPropertyChanged(nameof(Image));
-        //        }
-        //    }
-        //}
+        ImageSource image;
+        public ImageSource Image
+        {
+            get { return image; }
+            set
+            {
+                if (image != value)
+                {
+                    image = value;
+                    OnPropertyChanged(nameof(Image));
+                }
+            }
+        }
 
         string label;
         public string Label
@@ -49,6 +49,20 @@ namespace MolaApp.Page
                 {
                     label = value;
                     OnPropertyChanged(nameof(Label));
+                }
+            }
+        }
+
+        string points;
+        public string Points
+        {
+            get { return points; }
+            set
+            {
+                if (points != value)
+                {
+                    points = value;
+                    OnPropertyChanged(nameof(Points));
                 }
             }
         }

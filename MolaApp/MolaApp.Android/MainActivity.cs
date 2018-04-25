@@ -6,6 +6,7 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Android.OS;
+using FFImageLoading.Forms.Droid;
 
 namespace MolaApp.Droid
 {
@@ -21,6 +22,8 @@ namespace MolaApp.Droid
 
             Plugin.CurrentActivity.CrossCurrentActivity.Current.Activity = this;
             //Plugin.CurrentActivity.CrossCurrentActivity.Current.Init(this, bundle);
+
+            CachedImageRenderer.Init(enableFastRenderer: true);
 
             ZXing.Net.Mobile.Forms.Android.Platform.Init();
             Xamarin.Forms.Forms.Init(this, bundle);

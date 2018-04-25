@@ -27,10 +27,22 @@ namespace MolaApp.Page
             historyController = Container.Get<HistoryController>("history");
         }
 
-        protected override void OnAppearing()
+        protected override async void OnAppearing()
         {
             base.OnAppearing();
+            ProfileModel profile = await profileApi.GetAsync(authController.AuthToken.UserId);
+            if (string.IsNullOrEmpty(profile.Firstname))
+            {
+                // If firstname is empty then profile has not been edited, because it is a required field
+                ProfileEditPage profilePage = new ProfileEditPage(Container, authController.AuthToken.UserId);
+                await Navigation.PushAsync(profilePage);
+            }
+        }
 
+        async void AboutAsync(object sender, EventArgs e)
+        {
+            AboutPage aboutPage = new AboutPage(Container);
+            await Navigation.PushAsync(aboutPage);
         }
 
         async void BookmarksAsync(object sender, EventArgs e)
@@ -47,9 +59,7 @@ namespace MolaApp.Page
 
         async void EditProfileAsync(object sender, EventArgs e)
         {
-            ProfileModel profile = await profileApi.GetAsync(authController.AuthToken.UserId);
-            ProfileEditPage profilePage = new ProfileEditPage(Container);
-            await profilePage.SetModel(profile);
+            ProfileEditPage profilePage = new ProfileEditPage(Container, authController.AuthToken.UserId);
             await Navigation.PushAsync(profilePage);
         }
 

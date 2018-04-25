@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<mp:MolaPage xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:mp="clr-namespace:MolaApp.Page"
+    x:Class="MolaApp.Page.AboutPage"
+    Title="Über MOLA">
+
+
+    <ScrollView>
+        <StackLayout Padding="20">
+            <Image Source="logo_hands_512.png" HorizontalOptions="Center" VerticalOptions="Start" HeightRequest="250" WidthRequest="250" Margin="50, 10, 50, 10"/>
+            <Label Text="MOLA"
+                   XAlign="Center"
+                   FontSize="75"
+                   HorizontalOptions="Center" />
+            <Label Text="- Die App mit dem Aufnäher -"
+                   FontSize="Large"
+                   XAlign="Center"
+                   HorizontalOptions="Center" />
+            
+            <Label Text="wird dir präsentiert von"
+                   XAlign="Center"
+                   HorizontalOptions="Center"
+                   Margin="0, 20"/>
+
+            <Label Text="Bezirk München-Ost"
+                   FontSize="Large"
+                   XAlign="Center"
+                   HorizontalOptions="Center" />
+
+            <Label Text="Datenschutzerklärung"
+                   FontSize="Small"
+                   XAlign="Center"
+                   VerticalOptions="End" 
+                   HorizontalOptions="Center"
+                   Margin="10, 30, 10, 10">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer
+                        Tapped="ShowPrivacyPolicy"
+                        NumberOfTapsRequired="1" />
+                </Label.GestureRecognizers>
+            </Label>
+
+        </StackLayout>
+    </ScrollView>
+</mp:MolaPage>

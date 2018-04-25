@@ -18,28 +18,18 @@ namespace MolaApp.Page
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class RegistrationPage : MolaPage
     {
-        string scannedId;
-        public string ScannedId
-        {
-            get { return scannedId; }
-            set
-            {
-                if (scannedId != value)
-                {
-                    scannedId = value;
-                    OnPropertyChanged(nameof(ScannedId));
-                }
-            }
-        }
-
         IUserApi userApi;
         IProfileApi profileApi;
         AuthController authController;
 
+        LoginViewModel viewModel;
+
         public RegistrationPage (ServiceContainer container) : base(container)
 		{
 			InitializeComponent ();
-            BindingContext = this;
+
+            viewModel = new LoginViewModel();
+            BindingContext = viewModel;
 
             userApi = Container.Get<IUserApi>("api/user");
             profileApi = Container.Get<IProfileApi>("api/profile");
@@ -66,7 +56,7 @@ namespace MolaApp.Page
                 // Stop scanning
                 scanPage.IsScanning = false;
 
-                ScannedId = result.Text;
+                viewModel.ScannedId = result.Text;
 
                 waitHandle.Set();
 
@@ -82,23 +72,30 @@ namespace MolaApp.Page
 
         async Task RegisterAsync(object sender, EventArgs e)
         {
-            if(passwordEntry.Text != passwordConfirmEntry.Text)
+            if(passwordEntry.Text.Length < 4)
+            {
+                await DisplayAlert("Fehler", "Das Passwort muss mindestens 4 Zeichen lang sein!", "Ok");
+                return;
+            }
+
+            if (passwordEntry.Text != passwordConfirmEntry.Text)
             {
                 await DisplayAlert("Fehler", "Die eingegebenen Passwörter stimmen nicht überein!", "Ok");
                 return;
             }
 
-            UserModel model = new UserModel(ScannedId);
+            viewModel.IsBusy = true;
+
+            UserModel model = new UserModel(viewModel.ScannedId);
             model.Password = passwordEntry.Text;
 
             try
             {
                 await userApi.CreateAsync(model);
-                //await authController.LoginAsync(model);
-                //await profileApi.UpdateAsync(new ProfileModel(model.Id));
                 await Navigation.PopAsync();
+                DependencyService.Get<IToastMessage>().LongAlert("Account erstellt. Jetzt musst du dich noch einloggen!");
             }
-            catch (ConflictException ex)
+            catch (ConflictException conflictEx)
             {
                 await DisplayAlert("Dieb! ;-)", "Der von dir gescannte Code ist bereits für einen anderen Benutzer reserviert!", "Ok");
             }
@@ -106,11 +103,7 @@ namespace MolaApp.Page
             {
                 await DisplayAlert("Fehler", "Möglicherweise hast du gerade keine ausreichende Internetverbindung. Bitte versuche es an einem anderen Ort erneut!", "Ok");
             }
-        }
-
-        async void CancelAsync(object sender, EventArgs e)
-        {
-            await Navigation.PopAsync();
+            viewModel.IsBusy = false;
         }
     }
 }

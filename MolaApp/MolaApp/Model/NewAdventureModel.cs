@@ -11,9 +11,9 @@ namespace MolaApp.Model
         public string ImageId { get; set; }
 
         [JsonProperty("myPoints")]
-        public int MyPoints { get; set; }
+        public float MyPoints { get; set; }
 
         [JsonProperty("otherPoints")]
-        public int OtherPoints { get; set; }
+        public float WithPoints { get; set; }
     }
 }

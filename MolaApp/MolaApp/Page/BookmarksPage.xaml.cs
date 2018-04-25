@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -21,6 +22,8 @@ namespace MolaApp.Page
         public ObservableCollection<BookmarkViewModel> Bookmarks { get; }
 
         Dictionary<string, BookmarkViewModel> _bookmarks;
+
+        CancellationTokenSource cts;
 
         public BookmarksPage(ServiceContainer container) : base(container)
 		{
@@ -39,8 +42,9 @@ namespace MolaApp.Page
         protected override void OnAppearing()
         {
             base.OnAppearing();
+            cts = new CancellationTokenSource();
 
-            foreach(string profileId in bookmarkController.ProfileIds)
+            foreach (string profileId in bookmarkController.ProfileIds)
             {
                 BookmarkViewModel viewModel = null;
 
@@ -60,9 +64,15 @@ namespace MolaApp.Page
                     {
                         viewModel.Image = ImageSource.FromStream(() => new MemoryStream(image.Bytes));
                     };
-                    imageApi.Get(model.ImageId).Subscribe(setImage);
-                });
+                    imageApi.Get(model.ImageId).Subscribe(setImage, cts.Token);
+                }, cts.Token);
             }
+        }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            cts.Cancel();
         }
 
         async void OnItemTapped(object sender, ItemTappedEventArgs e)

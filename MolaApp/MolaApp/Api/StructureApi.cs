@@ -45,12 +45,7 @@ namespace MolaApp.Api
             var cache = BlobCache.LocalMachine;
             var cachedPromise = cache.GetAndFetchLatest(
                 key,
-                () => GetRemoteAsync(),
-                offset =>
-                {
-                    TimeSpan elapsed = DateTimeOffset.Now - offset;
-                    return elapsed > new TimeSpan(hours: 0, minutes: 1, seconds: 0);
-                }
+                () => GetRemoteAsync()
             );
 
             cachedPromise.Subscribe(subscribedStructure => {

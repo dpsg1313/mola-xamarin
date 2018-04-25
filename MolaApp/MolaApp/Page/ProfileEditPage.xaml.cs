@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 using Xamarin.Forms;
@@ -28,11 +29,13 @@ namespace MolaApp.Page
 
         ProfileEditViewModel viewModel;
 
-        MediaFile newImage;
+        byte[] newImage;
 
-        private bool initialized = false;
+        bool removeImage;
 
-        public ProfileEditPage(ServiceContainer container) : base(container)
+        CancellationTokenSource cts;
+
+        public ProfileEditPage(ServiceContainer container, string profileId) : base(container)
         {
             structureController = Container.Get<StructureController>("structure");
             profileApi = Container.Get<IProfileApi>("api/profile");
@@ -41,11 +44,18 @@ namespace MolaApp.Page
             InitializeComponent();
 
             viewModel = new ProfileEditViewModel();
-
             BindingContext = viewModel;
+
+            cts = new CancellationTokenSource();
+            profileApi.Get(profileId).Subscribe(SetModel, cts.Token);
         }
 
-        public async Task SetModel(ProfileModel profile)
+        ~ProfileEditPage()  // destructor
+        {
+            cts.Cancel();
+        }
+
+        void SetModel(ProfileModel profile)
         {
             model = profile;
 
@@ -65,6 +75,8 @@ namespace MolaApp.Page
             viewModel.WoodbadgeCount = profile.WoodbadgeCount;
             viewModel.FavouriteStage = profile.FavouriteStage;
             viewModel.RelationshipStatus = profile.RelationshipStatus;
+            viewModel.Association = profile.Association;
+            viewModel.IsPriest = profile.IsPriest;
 
             if (profile.GeorgesPoints < 0)
             {
@@ -115,31 +127,31 @@ namespace MolaApp.Page
             }
             else
             {
-                ImageModel image = await imageApi.GetAsync(profile.ImageId);
-                viewModel.Image = ImageSource.FromStream(() => new MemoryStream(image.Bytes));
+                imageApi.Get(profile.ImageId).Subscribe(image => {
+                    viewModel.Image = ImageSource.FromStream(() => new MemoryStream(image.Bytes));
+                }, cts.Token);
             }
-
-            initialized = true;
         }
 
         async void SaveAsync(object sender, EventArgs e)
         {
+            viewModel.IsBusy = true;
             if(string.IsNullOrEmpty(viewModel.Firstname) || string.IsNullOrEmpty(viewModel.Lastname) || viewModel.SelectedTribe == null || viewModel.SelectedFunction == null || viewModel.WoodbadgeCount < 0)
             {
+                viewModel.IsBusy = false;
                 DependencyService.Get<IToastMessage>().LongAlert("Du musst alle mit * gekennzeichneten Felder ausfüllen!");
                 return;
             }
 
+            if (removeImage)
+            {
+                model.ImageId = "";
+            }
+
             if (newImage != null)
             {
-                byte[] buffer;
-                Stream stream = newImage.GetStream();
-                using (BinaryReader br = new BinaryReader(stream))
-                {
-                    buffer = br.ReadBytes((int)stream.Length);
-                }
                 ImageModel image = new ImageModel(Guid.NewGuid().ToString());
-                image.Bytes = buffer;
+                image.Bytes = newImage;
 
                 await imageApi.PutAsync(image);
                 model.ImageId = image.Id;
@@ -148,6 +160,8 @@ namespace MolaApp.Page
             viewModel.WriteToModel(model);
             await profileApi.UpdateAsync(model);
             await Navigation.PopAsync();
+            DependencyService.Get<IToastMessage>().ShortAlert("Profil gespeichert");
+            viewModel.IsBusy = false;
         }
 
         async void CancelAsync(object sender, EventArgs e)
@@ -218,12 +232,25 @@ namespace MolaApp.Page
                 return;
             }
 
-            newImage = image;
-            viewModel.Image = ImageSource.FromStream(() => image.GetStream());
+            ImageCropPage cropPage = new ImageCropPage(Container);
+            cropPage.OnCropResult += (result) =>
+            {
+                viewModel.IsBusy = true;
+
+                newImage = result;
+                viewModel.Image = ImageSource.FromStream(() => new MemoryStream(result));
+                removeImage = false;
+                viewModel.IsBusy = false;
+            };
+            await Navigation.PushAsync(cropPage);
+            await Task.Run(() => cropPage.SetSource(ImageSource.FromStream(() => image.GetStream())));
+            viewModel.IsBusy = false;
         }
 
         async void PickPhotoAsync()
         {
+            viewModel.IsBusy = true;
+
             await CrossMedia.Current.Initialize();
 
             if (!CrossMedia.Current.IsPickPhotoSupported)
@@ -254,13 +281,26 @@ namespace MolaApp.Page
                 return;
             }
 
-            newImage = image;
-            viewModel.Image = ImageSource.FromStream(() => image.GetStream());
+            ImageCropPage cropPage = new ImageCropPage(Container);
+            cropPage.OnCropResult += (result) =>
+            {
+                viewModel.IsBusy = true;
+
+                newImage = result;
+                viewModel.Image = ImageSource.FromStream(() => new MemoryStream(result));
+                removeImage = false;
+                viewModel.IsBusy = false;
+            };
+            await Navigation.PushAsync(cropPage);
+            await Task.Run(() => cropPage.SetSource(ImageSource.FromStream(() => image.GetStream())));
+            viewModel.IsBusy = false;
         }
 
         async void RemovePhotoAsync()
         {
-
+            viewModel.Image = ImageSource.FromFile("avatar.png");
+            removeImage = true;
+            newImage = null;
         }
     }
 }

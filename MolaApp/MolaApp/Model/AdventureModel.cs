@@ -13,6 +13,9 @@ namespace MolaApp.Model
         [JsonProperty("confirmed")]
         public bool Confirmed { get; set; }
 
+        [JsonProperty("points")]
+        public float Points { get; set; }
+
         [JsonProperty("withUserId")]
         public String WithUserId { get; set; }
 
@@ -21,6 +24,9 @@ namespace MolaApp.Model
 
         [JsonProperty("withConfirmed")]
         public bool WithConfirmed { get; set; }
+
+        [JsonProperty("withPoints")]
+        public float WithPoints { get; set; }
 
         public AdventureModel(string id)
         {

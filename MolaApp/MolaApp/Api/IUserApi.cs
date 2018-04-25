@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MolaApp.Api
 {
-    public interface IUserApi : IGetObjectApi<UserModel>
+    public interface IUserApi
     {
         Task CreateAsync(UserModel model);
 

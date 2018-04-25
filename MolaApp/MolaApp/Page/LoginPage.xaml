@@ -5,50 +5,92 @@
                 x:Class="MolaApp.Page.LoginPage"
                 Title="Login">
 
-    <ScrollView>
-        <StackLayout HorizontalOptions="CenterAndExpand">
-            <Label x:Name="scanLabel"
-               Text="Scanne deinen Aufnäher um dich anzumelden!"
-               VerticalOptions="Center" 
-               HorizontalOptions="CenterAndExpand" />
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <mp:EmptyStringToFalseConverter x:Key="emptyToFalse" />
+            <mp:EmptyStringToTrueConverter x:Key="emptyToTrue" />
+            <mp:InverseBooleanConverter x:Key="InverseBoolean" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
 
-            <Image x:Name="scanButton"
-               Margin="50, 10, 50, 20"
-                   HeightRequest="150"
-               Source="scan_qrcode.png"
-               VerticalOptions="Center" 
-               HorizontalOptions="Center">
-                <Image.GestureRecognizers>
-                    <TapGestureRecognizer
-                    Tapped="ScanAsync"
-                    NumberOfTapsRequired="1" />
-                </Image.GestureRecognizers>
-            </Image>
-            
-            <Entry x:Name="passwordEntry" 
-                Placeholder="Passwort" 
-                IsPassword="True"
-                VerticalOptions="Start" 
-                HorizontalOptions="CenterAndExpand"/>
+    <AbsoluteLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
 
-            <Button x:Name="loginButton" 
-                Text="Anmelden" 
-                Clicked="LoginAsync" 
-                BackgroundColor="LawnGreen"
-                VerticalOptions="Start" 
-                HorizontalOptions="CenterAndExpand" />
+        <ScrollView AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1">
+            <StackLayout HorizontalOptions="CenterAndExpand" IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBoolean}}" Padding="20">
+                <Label x:Name="scanLabel"
+                    Text="Scanne deinen Aufnäher, um dich anzumelden!"
+                    FontSize="Medium" 
+                    XAlign="Center"
+                    Margin="0, 20, 0, 0"
+                    VerticalOptions="Start"
+                    HorizontalOptions="CenterAndExpand" />
 
-            <StackLayout Orientation="Horizontal" VerticalOptions="EndAndExpand" HorizontalOptions="CenterAndExpand" Margin="0, 20, 0, 0">
-                <Label Text="Du hast noch keinen Account?"
-                VerticalOptions="End" 
-                HorizontalOptions="CenterAndExpand" />
+                <Label Text="Dein Code lautet"
+                    Margin="10, 30, 10, 0"
+                    FontSize="Medium"
+                    XAlign="Center"
+                    VerticalOptions="Center" 
+                    HorizontalOptions="Center"
+                    IsVisible="{Binding ScannedId, Converter={StaticResource emptyToFalse}}"/>
+                <Label Text="{Binding ScannedId}"
+                    Margin="0, 10, 0, 0"
+                    FontSize="Medium"
+                    XAlign="Center"
+                    TextColor="LightSteelBlue"
+                    VerticalOptions="Center" 
+                    HorizontalOptions="Center"
+                    IsVisible="{Binding ScannedId, Converter={StaticResource emptyToFalse}}"/>
+                
+                <Image x:Name="scanButton"
+                    Margin="0, 20, 0, 0"
+                    HeightRequest="150"
+                    Source="scan_qrcode.png"
+                    VerticalOptions="Center" 
+                    HorizontalOptions="Center"
+                    IsVisible="{Binding ScannedId, Converter={StaticResource emptyToTrue}}" >
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer
+                            Tapped="ScanAsync"
+                            NumberOfTapsRequired="1" />
+                    </Image.GestureRecognizers>
+                </Image>
 
-                <Button x:Name="registerButton" 
-                Text="Registrieren" 
-                Clicked="RegisterAsync" 
-                VerticalOptions="End" 
-                HorizontalOptions="Center" />
+                <Entry x:Name="passwordEntry" 
+                    Margin="0, 20, 0, 0"
+                    Placeholder="Passwort" 
+                    IsPassword="True"  />
+
+                <Button x:Name="loginButton" 
+                    Text="Anmelden" 
+                    Clicked="LoginAsync" 
+                    BackgroundColor="LightSteelBlue" />
+
+                <StackLayout Orientation="Horizontal" VerticalOptions="EndAndExpand" HorizontalOptions="CenterAndExpand" Margin="0, 20, 0, 0">
+                    <Label Text="Du hast noch keinen Account?"
+                        VerticalOptions="Center" 
+                        HorizontalOptions="CenterAndExpand" />
+
+                    <Button x:Name="registerButton" 
+                        Text="Registrieren" 
+                        Clicked="RegisterAsync" 
+                        VerticalOptions="End" 
+                        HorizontalOptions="Center" />
+                </StackLayout>
             </StackLayout>
+        </ScrollView>
+
+        <StackLayout 
+            IsVisible="{Binding IsBusy}"
+            BackgroundColor="LightSteelBlue"
+            Opacity="0.6"
+            AbsoluteLayout.LayoutFlags="All"
+            AbsoluteLayout.LayoutBounds="0,0,1,1">
         </StackLayout>
-    </ScrollView>
+        <ActivityIndicator 
+            AbsoluteLayout.LayoutFlags="PositionProportional"
+            AbsoluteLayout.LayoutBounds="0.5,0.5,-1,-1"
+            IsRunning="{Binding IsBusy}" 
+            Color="SteelBlue" />
+        
+    </AbsoluteLayout>
 </mp:MolaPage>

@@ -28,6 +28,12 @@ namespace MolaApp.Model
         [JsonProperty("functionId")]
         public string FunctionId { get; set; }
 
+        [JsonProperty("association")]
+        public string Association { get; set; }
+
+        [JsonProperty("priest")]
+        public bool IsPriest { get; set; }
+
 
         [JsonProperty("phone")]
         public string Phone { get; set; }
