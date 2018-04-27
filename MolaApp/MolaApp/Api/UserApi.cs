@@ -41,6 +41,10 @@ namespace MolaApp.Api
             {
                 throw new ConflictException();
             }
+            else if(response.StatusCode == (HttpStatusCode)423) // Locked
+            {
+                throw new InvalidCodeException();
+            }
             else
             {
                 throw new Exception("Unexpected failure!");

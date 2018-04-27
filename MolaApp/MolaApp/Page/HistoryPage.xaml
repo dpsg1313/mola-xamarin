@@ -5,7 +5,7 @@
                 xmlns:fftransformations="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
                 xmlns:mp="clr-namespace:MolaApp.Page"
                 x:Class="MolaApp.Page.HistoryPage"
-                Title="Historie">
+                Title="Zuletzt gescannt">
 
     <ContentPage.ToolbarItems>
         <ToolbarItem Order="Primary" Icon="history_small_grey.png"/>

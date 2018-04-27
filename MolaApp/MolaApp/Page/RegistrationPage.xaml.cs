@@ -99,6 +99,10 @@ namespace MolaApp.Page
             {
                 await DisplayAlert("Dieb! ;-)", "Der von dir gescannte Code ist bereits für einen anderen Benutzer reserviert!", "Ok");
             }
+            catch(InvalidCodeException codeEx)
+            {
+                await DisplayAlert("Fehler", "Es sind nur offizielle Aufnäher erlaubt!", "Ok");
+            }
             catch (Exception ex)
             {
                 await DisplayAlert("Fehler", "Möglicherweise hast du gerade keine ausreichende Internetverbindung. Bitte versuche es an einem anderen Ort erneut!", "Ok");

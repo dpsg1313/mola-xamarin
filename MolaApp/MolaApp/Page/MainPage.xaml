@@ -62,7 +62,7 @@
                         NumberOfTapsRequired="1" />
                     </Image.GestureRecognizers>
                 </Image>
-                <Label Text="Historie" XAlign="Center" Margin="0,-5,0,0" />
+                <Label Text="Zuletzt gescannt" XAlign="Center" Margin="0,-5,0,0" />
             </StackLayout>
 
         </StackLayout>
